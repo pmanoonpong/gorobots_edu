@@ -1,0 +1,75 @@
+\documentclass[a4paper,10pt]{scrartcl}
+\usepackage[utf8x]{inputenc}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{fancyhdr}
+\usetikzlibrary{arrows,shapes,petri,shadows}
+\usepackage{lastpage}
+
+
+%opening
+\title{LpzRobots and GoRobotos}
+\subtitle{An installation manual}
+\author{Frank Hesse, Christoph Rauterberg}
+
+\begin{document}
+ \tikzstyle{vertex}=[circle,fill=black!25,minimum size=20pt,inner sep=0pt]
+ \tikzstyle{blue vertex} = [vertex, fill=blue!30]
+ \tikzstyle{green vertex} = [vertex, fill=green!30]
+ \tikzstyle{red vertex} = [vertex, fill=red!30]
+ \tikzstyle{edge} = [draw,thick,->]
+ \tikzstyle{weight} = [font=\small]
+ \tikzstyle{blue edge} = [draw,line width=5pt,-,blue!30]
+ \tikzstyle{green edge} = [draw,line width=5pt,-,green!30]
+ \tikzstyle{red edge} = [draw,line width=5pt,-,red!30]
+ \tikzstyle{ignored edge} = [draw,line width=5pt,-,black!20]
+\renewcommand{\emph}[1]{\textcolor{blue}{#1}}
+\newcommand{\remph}[1]{\textcolor{red}{#1}}
+\definecolor{mygreen}{rgb}{0,0.7,0}
+
+
+\maketitle
+
+\begin{center}
+\includegraphics[width=5cm]{./pics/LogoUni.png} % [width=4cm,height=1.5cm]
+ \includegraphics[width=3cm]{./pics/LogoBCCN.png}\\ % [width=3cm,height=3cm]
+\end{center}
+
+\begin{abstract}
+This installation manual shall first provide some general knowledge about the gorobots-Project and
+the architecture we use. Then this guide will explain step-by-step how to set up
+your Eclipse, so that you can work with the LpzRobots-Simulation and the gorobots-Project. \\
+In the future, we would like to complete this installation manual in a way, that it will also include manuals for setting up the software needed for AMOSII (Hexapod) and other robots.
+\end{abstract}
+
+\begin{center}
+\includegraphics[width=8cm]{./pics/AIdiagram.png}
+\end{center}
+
+
+\thispagestyle{empty}
+\newpage
+\thispagestyle{empty}
+\tableofcontents
+
+
+\newpage
+\pagestyle{fancy} %eigener Seitenstil
+\fancyhf{} %alle Kopf- und Fußzeilenfelder bereinigen
+\fancyfoot[L]{\small{LpzRobots and GoRobotos Installation Manual}} %Kopfzeile links
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[R]{\small{Page \small{\thepage} of \pageref*{LastPage}}} %Seitennummer
+
+
+\include{./sections/Overview}
+\include{./sections/setup}
+\include{./sections/ProjectStruct}
+\include{./sections/GIT}
+\include{./sections/InstallHand}
+\include{./sections/camera_laserscanner}
+\include{./sections/FAQ}
+
+\end{document}

@@ -1,0 +1,42 @@
+\section{Setting up Eclipse and LpzRobots}
+
+\subsection{Running setUpGoRobots.sh}
+% MENTION /HOME/YOURLOGIN ?????
+From your supervisor, you will receive the .zip-File \emph{setUpGoRobots.zip} - or you can find it at \emph{gorobots/docs/install\_script/}. To begin with, you need to extract the files and the script \emph{setUpGoRobots.sh} within.
+This script will:
+\begin{enumerate}
+ \item Install the required packages on your computer
+ \item Include important settings to your \emph{.bashrc}
+ \item Fetch the repositories \emph{LpzRobots} and \emph{GoRobots}
+ \item Import the project settings file
+ \item Compile the files
+\end{enumerate}
+
+After extracting, you can run the script, by typing \emph{./setUpGoRobots.sh} in the corresponding directory.
+However, you might have to change permission "chmod u+x setUpGoRobots.sh" if you cannot execute.
+
+\subsubsection{Forking a repository}
+The script will ask you for the URL of your forked repository. Please read about how to fork a network with Assembla in Section \ref{forksection}.
+
+\subsection{Setting up Eclipse}
+
+\subsubsection{Installing Tool-Kits within Eclipse}
+Before importing the repositories, you need two tool-kits for your Eclipse:
+\begin{enumerate}
+ \item To install a tool-kit, go to \emph{Help}$\rightarrow$\emph{Install Software}
+ \item The first tool-kit you need is the C++ Development Kit. Work with the following link:\\ \url{http://download.eclipse.org/tools/cdt/releases/indigo} \\ and install the so called \emph{CDT}-Tool-kits.
+ \item The second tool-kit is EGIT for accessing GIT within Eclipse. You can download it working with this link:\\ \url{http://download.eclipse.org/egit/updates}. Whilst doing so, you have to \emph{check} the box for \emph{Eclipse Git Team Provider} and \emph{uncheck} the box for \emph{EGit Mylyn}.
+\end{enumerate}
+
+\subsubsection{Importing the Repositories}
+
+Once you have finished running the script and have installed the tool-kits, you are ready to import the repositories into your Eclipse. \\
+To do so, first switch into the \emph{Git Repositories - View} within Eclipse. You can do this by clicking: \emph{Window}$\rightarrow$\emph{Show View}$\rightarrow$\emph{Other}$\rightarrow$\emph{Git}$\rightarrow$\emph{Git-Repositories} and hit \emph{OK}.
+In this view, you can choose \emph{Add an existing local GIT repository}. The script will have placed the files at \emph{/home/yourlogin/workspace}.
+
+\subsubsection{Code-Style withing Eclispe}
+To adapt the Code-Style, go \emph{Window}$\rightarrow$\emph{Preferences}$\rightarrow$\emph{C/C++}$\rightarrow$ \\ \emph{Code-Style}$\rightarrow$\emph{Import}. Now you choose the file:\\ \nolinkurl{workspace/lpzrobots/codeStyleEclipse.xml} and hit \emph{apply}.
+
+\subsection{Troubleshooting}
+
+If you encounter any problems while using the script, please contact Frank or me (\emph{c.rauterberg@gmx.de}) and send us error output, solutions you found, etc. if possible. Find the install-by-hand-instructions at the end of this manual. 

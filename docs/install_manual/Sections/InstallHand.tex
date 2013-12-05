@@ -1,0 +1,28 @@
+\section{Installing LpzRobots by Hand}
+
+
+% HIER MUSS NOCH DER PFAD HIN !!!!!!!!!!!
+% Es wuerde sich anbieten, das Skript genau da hin zu schmeißen, wo auch die Readme in GoMasters ist
+Before you install LpzRobots, you first need to install a couple of additional packages. You can do this using the following commands:\\
+% SUBVERSION IS STILL LISTED HERE - DO WE STILL NEED THIS??????
+% \emph{sudo apt-get install g++ make m4 libreadline-dev libgsl0-dev libglu-dev $\backslash$ \\ libgl1-mesa-dev libopenscenegraph-dev libqt4-dev qt4-qmake libqt4-qt3support$\backslash$ \\ openjdk-6-jdk automake gnuplot libgsl0ldbl xutils-dev libltdl-dev $\backslash$ \\ libtool subversion eclipse-platform eclipse-pde} \\
+\emph{sudo apt-get install$\backslash$ \\
+ g++  make  automake libtool xutils-dev m4  libreadline-dev  libgsl0-dev$\backslash$ \\
+ libglu-dev libgl1-mesa-dev freeglut3-dev  libopenscenegraph-dev$\backslash$ \\
+ libqt4-dev libqt4-opengl libqt4-opengl-dev qt4-qmake  libqt4-qt3support gnuplot}\footnote{You can also find this list of dependencies in the repository \emph{lpzrobots}}\\
+Also, you will need this package: \\
+% \emph{sudo apt-get install freeglut3 freeglut3-dev} \\
+\emph{sudo apt-get install binutils-gold}\footnote{You may need this only for newer Ubuntu-Versions ($>=11.10$), as the linker does not link anymore} \\
+Furthermore, you will need to add some lines to your \emph{.bashrc}: \\
+\small{
+\begin{tabbing}
+\# definitions for lpzrobots \\
+   export CPATH="\$HOME$/$include"\\
+  export LIBRARY\_PATH="\$HOME$/$lib"\\
+  export LD\_LIBRARY\_PATH=\$\{LD\_LIBRARY\_PATH\}:\$HOME$/$lib:$/$usr$/$lib$/$osgPlugins2.8.1\\
+  export PATH=\$\{PATH\}:\$HOME$/$bin\\
+\end{tabbing}}
+Now you are ready to install the LpzRobot-Simulation. \\
+As Eclipse has now synchronized its workspace with the GIT-Repository, you can find the setup-files in your workspace.\\ To install LpzRobots, go to \emph{workspace}$\rightarrow$\emph{lpzrobots}
+and run make (all). \\
+Install it to \emph{/home/YOURLOGIN} and choose \emph{install as developer},\\ which is the shortcut \emph{d}

@@ -1,0 +1,114 @@
+\section{FAQs}
+
+\subsection{Installation errors in general}
+
+\subsubsection{Symbol lookup error}
+After installing the "binutils-gold" package, I get the following error after recompiling my source code:
+"./test: symbol lookup error: /usr/local/lib/liburg.so.0: undefined symbol: \_ZTIN3qrk10CoordinateE"
+(Note: liburg is a library for the Hokuyo laser scanners from here or via packet manager).\\
+
+As "binutils-gold" contains a different linker for C++ files, which is optimized for speed, it is likely that this new linker does not link the laser scanner libraries correctly (probably due to "bad" programming within the drivers).
+However, this new linker is not necessary for compiling and running lpzrobots, it just speeds up the compilation time.
+So the solution to the problem is simple: Uninstall "binutils-gold" and everything works.
+
+
+\subsection{Errors using setUpGoRotobots.sh}
+
+\subsubsection{Error with \emph{git clone}}
+
+Whilst cloning the repositories, I encountered the following error:
+\begin{lstlisting}
+git clone https://crauterb@git.assembla.com/lpzrobots.git -b master
+Cloning into crauterb-lpzrobots-fork...
+Password:
+remote: Counting objects: 25478, done.
+remote: Compressing objects: 100% (6030/6030), done.
+remote: Total 25478 (delta 19211), reused 25478 (delta 19211)
+Receiving objects: 100% (25478/25478), 19.97 MiB | 527 KiB/s, done.
+Resolving deltas: 100% (19211/19211), done.
+warning: Remote branch master not found in upstream origin, using HEAD instead
+warning: remote HEAD refers to nonexistent ref, unable to checkout.
+\end{lstlisting}
+
+the repository Lpzrobots when there was no branch \emph{master}, and for some reason, it was not added later and did not appear anywear.
+The solution was simple: Delete the forked version and create a new one - if possible. Worked for me.
+
+
+
+\subsection{Problems with GIT}
+
+\subsubsection{Setting up Repositories in Eclipse}
+\label{EclipseGIT}
+In some cases, the instructions on how to set up the GIT-repositories within Eclipse did not work. \\
+Here is a different approach, that worked for me: \\
+\begin{enumerate}
+ \item Import the repositories into the GIT-view of Eclipse, just as described before
+ \item Instead of importing over the GIT-View, you now go onto \emph{File $\rightarrow$ Import $\rightarrow$ General $\rightarrow$ Existing Projects into Workspace} and you then choose the two repositories
+ \item After Eclipse has imported the files, you can \emph{right-click} on the Project, and then select \emph{Team $\rightarrow$ Share}
+ \item Now, just select \emph{GIT} and the two GIT-repository-adresses should appear
+ \item \emph{Apply}
+\end{enumerate}
+
+
+\subsubsection{No Connection to GIT Server: The remote end hung up unexpectedly.}
+
+If you defined stable as usual (check with{\tt git remote -v}):\\
+ \nolinkurl{stable}    \nolinkurl{https://wbj@git.assembla.com/lpzrobots.git (fetch)}\\
+ \nolinkurl{stable}    \nolinkurl{https://wbj@git.assembla.com/lpzrobots.git (push)}\\\\
+%
+but when typing {\tt git fetch origin} you get the following error message: \\
+{\tt Password for 'https://wbj@git.assembla.com':} \\
+{\tt error: RPC failed; result=22, HTTP code = 401} \\
+{\tt fatal: The remote end hung up unexpectedly} \\\\
+%
+and also defining the origin with http only:\\
+\nolinkurl{stable_http}    \nolinkurl{http://wbj@git.assembla.com/lpzrobots.git (fetch)}\\
+does not help, try to use the git protocol:\\
+\nolinkurl{stable_git2}    \nolinkurl{git@git.assembla.com:lpzrobots.git (fetch)}\\
+\nolinkurl{stable_git2}      \nolinkurl{git@git.assembla.com:lpzrobots.git (push)}
+
+
+
+
+
+
+
+
+
+
+\subsection{Errors when starting the simulation}
+
+The error messages was:
+
+\begin{lstlisting}
+> ./start
+> ./start: error while loading shared libraries: libode\_dbl.so.1:
+  cannot open shared object file: No such file or directory
+\end{lstlisting}
+The solution was:
+\begin{lstlisting}
+ > source ~/.bashrc
+\end{lstlisting}
+
+
+\begin{lstlisting}
+if you use Ubuntu version 12.4 LTS, you might see this problem:
+
+> ./start
+> ./start: symbol lookup error: /usr/lib/libgsl.so.0: undefined symbol: cblas_dnrm2
+\end{lstlisting}
+The solution was:
+\begin{lstlisting}
+ > sudo apt-get remove binutils-gold
+\end{lstlisting}
+
+
+
+\subsection{Using Lpzrobots}
+\begin{lstlisting}
+> after start simulation , press 1 to fixed camera view
+> Ctrl r = record movie
+> .\start -f = record log file
+> .\start = start program
+> .\start -g 1 = display GUI
+\end{lstlisting} 
