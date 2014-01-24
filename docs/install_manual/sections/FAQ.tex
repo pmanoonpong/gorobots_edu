@@ -112,3 +112,14 @@ The solution was:
 > .\start = start program
 > .\start -g 1 = display GUI
 \end{lstlisting} 
+
+\subsection{Using EPuck Monitor}
+
+\subsubsection{When trying to run qmake, I obtain ``unknown QT: widgets''}
+EPuck monitor is optimized for Qt5. If you obtain the ``unknown QT: widgets'' warning you are most likely using Qt4 by default on your system. Find out how to enable Qt5 by default on your system. If you are working with Ubuntu 12.04 LTS, the following terminal commands are what you are looking for. They will install Qt5 and enable it as default:
+\begin{lstlisting}
+$ sudo apt-add-repository ppa:ubuntu-sdk-team/ppa
+$ sudo apt-get update
+$ sudo apt-get install qtdeclarative5-dev qt5-default
+\end{lstlisting}
+

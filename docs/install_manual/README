@@ -1,6 +1,10 @@
 Goettingen Robotics Repository  - docs/install_manual directory
 
 this directory includes:
-- latex sources and the latest pdf for the installation manual
+- latex sources for the installation manual
 - the required pictures go into the "pics" subfolder
-- The .tex file of the manual will include the different sections from the subfolder "Sections"
+- The .tex file of the manual will include the different sections from the 
+  subfolder "Sections"
+
+To build the installalation manual pdf file, either run pdflatex manually or 
+use the provided Makefile to build the manual by simply typing "make".
