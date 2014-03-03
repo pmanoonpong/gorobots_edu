@@ -18,6 +18,7 @@
 
 #include <utils/ann-framework/ann.h>
 #include <utils/ann-framework/backpropagation.h>
+#include <utils/ann-framework/neuron.h>
 #include <iostream>
 #include <map>
 
@@ -39,29 +40,37 @@ class TestANN : public ANN
 };
 
 TestANN::TestANN() {
-  setNeuronNumber(6); // total number of neurons
+
+  //set transfer function
+  //setDefaultTransferFunction(ANN::identityFunction());
+  //setDefaultTransferFunction(ANN::tanhFunction());
+  setDefaultTransferFunction(ANN::logisticFunction());
+  //setDefaultTransferFunction(ANN::thresholdFunction());
+
+  setNeuronNumber(5); // total number of neurons
+
+// Set transfer function for individual neuron
+//  n(0)->setTransferFunction(ANN::logisticFunction()); // input neuron
+//  n(1)->setTransferFunction(ANN::identityFunction()); // input neuron
+//  n(2)->setTransferFunction(ANN::logisticFunction()); // hidden neuron
+//  n(3)->setTransferFunction(ANN::tanhFunction()); // hidden neuron
+//  n(4)->setTransferFunction(ANN::logisticFunction()); // output neuron
 
   w(2,0, 0.1); // synapse from neuron 0 to 2 with weight 0.1
   w(2,1, 0.8);
-  w(2,5,-0.5);
 
   w(3,0,-1.0);
   w(3,1, 1.0);
-  w(3,5, 0.5);
 
   w(4,2, 0.1);
   w(4,3,-0.7);
-  w(4,5, 0.3);
 }
 
 int main(int argc, char **argv) {
   TestANN ann;
 
-  // set bias neuron to 1
-  ann.setInput(5,1);
-
   // create a topolocial sorting of our network. This is required for the
-  // backpropagation algorithm
+  // backpropagation algorithm as "Full Batch mode"
   ann.updateTopologicalSort();
 
   // training data
@@ -77,7 +86,8 @@ int main(int argc, char **argv) {
   trainer.defineInputNeuron(1, ann.getNeuron(1));
   trainer.defineOutputNeuron(0, ann.getNeuron(4));
   trainer.includeAllSynapses();
-  trainer.setLearningRate(0.2);
+  trainer.includeAllNeuronBiases();
+  trainer.setLearningRate(0.1);
   for (int i=0; i<4; i++)
   {
     TrainingPattern* p = new TrainingPattern;
@@ -87,7 +97,7 @@ int main(int argc, char **argv) {
     trainer.addTrainingPattern(p);
   }
 
-  trainer.learn(10000);
+  trainer.learn(50000);
 
   ann.setInput(0,0);
   ann.setInput(1,0);
@@ -108,5 +118,7 @@ int main(int argc, char **argv) {
   ann.setInput(1,1);
   ann.feedForwardStep();
   std::cout << "1 1 => " << ann.getOutput(4) << std::endl;
+
+  std::cout << ann.dumpWeights();
 }
 
