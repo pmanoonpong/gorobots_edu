@@ -22,18 +22,22 @@
 #include "neuron.h"
 #include "ann.h"
 
-Synapse::Synapse(Neuron * const apost, Neuron * const apre)
+Synapse::Synapse(Neuron * const apost, Neuron * const apre,
+    const bool& connect)
 : pre(apre), post(apost)
 {
-    pre->addSynapseOut(this);
-    post->addSynapseIn(this);
+    if (connect)
+    {
+      pre->addSynapseOut(this);
+      post->addSynapseIn(this);
+    }
     weight = 0;
 }
 
 Synapse::~Synapse()
 {
-    pre->removeSynapseOut(this);
-    post->removeSynapseIn(this);
+    if (pre) pre->removeSynapseOut(this);
+    if (post) post->removeSynapseIn(this);
 }
 
 Neuron* Synapse::getPost() const

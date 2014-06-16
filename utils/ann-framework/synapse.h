@@ -43,10 +43,13 @@ public:
      * The constructor also "registers" the new synapse at the two neurons
      * so that the synapse is inserted into their corresponding lists.
      *
-     * @param apost pointer to the postsynaptic neuron
-     * @param apre  pointer to the presynaptic neuron
+     * @param apost   pointer to the postsynaptic neuron
+     * @param apre    pointer to the presynaptic neuron
+     * @param connect if true, the synapse will register itself at the two
+     *                neurons it connects
      */
-    Synapse(Neuron * const apost, Neuron * const apre);
+    Synapse(Neuron * const apost, Neuron * const apre,
+        const bool& connect=true);
 
     /**
      * The destructor

@@ -28,6 +28,40 @@ then
 	sudo apt-get install binutils-gold
 	echo "sudo apt-get install git libncurses-dev"
 	sudo apt-get install git libncurses-dev
+
+	read -p 'Do you want to install drivers for the Hokuyo Laser Range Finder? [y/n]
+	if [ $answer = "y" ];
+	then
+		sudo apt-get install liburg0-dev
+	fi
+
+	read -p 'Do you want to install drivers for the xIMU Inertial Measurement Unit? [y/n]
+	if [ $answer = "y" ];
+	then
+		#Installing driver for IMU USB sensor----Start
+		echo "sudo apt-get install libusb-1.0-0"
+		sudo apt-get install libusb-1.0-0
+		echo "Install FTDI drivers"
+		#Download drivers and extract them
+		wget -q "http://www.ftdichip.com/Drivers/D2XX/Linux/libftd2xx1.1.12.tar.gz"
+		mkdir ftdi
+		tar -xf libftd2xx1.1.12.tar.gz -C ftdi
+		#Check for 64 Bit and copy corresponding libraries (hide output of cp)
+		if grep -wq lm /proc/cpuinfo;
+		then
+			sudo cp ftdi/release/build/x86_64/lib* /usr/local/lib 2>&1 | grep -v 'omitting directory'
+		else
+			sudo cp ftdi/release/build/i386/lib* /usr/local/lib 2>&1 | grep -v 'omitting directory'
+		fi
+		#Make library accessible and create symbolic links
+		sudo chmod 0755 /usr/local/lib/libftd2xx.so.1.1.12
+		sudo ln -sf /usr/local/lib/libftd2xx.so.1.1.12 /usr/local/lib/libftd2xx.so
+		#Remove downloaded files
+		rm -r ftdi libftd2xx1.1.12.tar.gz
+		echo "Done"
+		#Installing driver for IMU USB sensor----End
+	fi	
+
 	echo 
 	echo
 else

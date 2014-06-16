@@ -1,0 +1,130 @@
+\section{Using the Google Test Framework for Unit Testing}
+
+We are trying to maintain our code with the help of a unit testing framework, 
+namely googletest. 
+
+\subsection{Installing the framework}
+
+To be able to use this feature and develop new test cases, you first have to 
+install the googletest framework. 
+Here are the necessary steps:
+
+Start by downloading the source code of the most recent googletest version. 
+It is available under \url{https://code.google.com/p/googletest/downloads}. 
+Decompress the archive and enter it in a terminal:
+\begin{lstlisting}
+$ cd gtest-1.7.0
+\end{lstlisting}
+Inside the decompressed folder, create a new directory called ``build'' and enter it:
+\begin{lstlisting}
+$ mkdir build
+$ cd build
+\end{lstlisting}
+Use cmake to create a Makefile and use this Makefile to build googletest:
+\begin{lstlisting}
+$ cmake ..
+$ make
+\end{lstlisting}
+You'll find a libgtest.a and libgtest\_main.a file inside the build directory. 
+Copy these files to some path that is registered in the LD\_LIBRARY\_PATH 
+environment variable. Typically, during the installation of lpzrobots, you add 
+the lib folder in your home directory to the LD\_LIBRARY\_PATH. 
+To copy the files there, type:
+\begin{lstlisting}
+$ cp libgtest.a libgtest_main.a ~/lib
+\end{lstlisting}
+Furthermore, you have to copy the folder gtest inside the include directory 
+located in the googletest root folder to some path that you include into the 
+search path while compiling gorobots simulations. 
+You can use the include folder created during the lpzrobots installation 
+(typically in your home folder). Starting in the build directory, type the 
+following:
+\begin{lstlisting}
+$ cd ../include
+$ cp -r gtest ~/include/
+\end{lstlisting}
+This finishes the installation of the googletest framework. 
+You may now enter the gorobots folder and build the test cases:
+\begin{lstlisting}
+$ cd ~/workspace/gorobots
+$ make test
+\end{lstlisting}
+You should also try to run the tests:
+\begin{lstlisting}
+$ ./build/run_test
+\end{lstlisting}
+
+\subsection{Creating test cases}
+There is a nice tutorial about the basic ideas and concepts of the googletest
+framework at the webpage of the project. 
+You should definitely read it before going on:
+\url{https://code.google.com/p/googletest/wiki/V1_7_Primer}
+
+Within the gorobots project, we want to use the googletest framework for real 
+unit testing as well as for something that is more like integration testing.
+Unit testing refers to the testing of as small as possible subunits of code.
+For instance, there is a test for the ann-framework that checks whether the 
+activity property of the Neuron class works as expected:
+\begin{lstlisting}
+  TEST(NeuronTest, activity) {
+    Neuron neuron;
+    neuron.setActivity(1.2);
+    ASSERT_EQ(1.2, neuron.getActivity());
+  }
+\end{lstlisting}
+This is as primitive as it can get. Observe that ``NeuronTest'' is the name of 
+the test case and ``activity'' the name of the actual test. You should make sure
+your test case names are unique within gorobots.
+
+For creating a test for a given unit of code, create a new file in the  
+``tests''  folder within the gorobots repository.
+The path of the file within the tests folder should resemble the path of the 
+tested unit in the gorobots repository.
+Furthermore, the name of the test file should be the name of the unit plus 
+``\_test''.
+If, for instance, the files containing the actual code are
+\begin{lstlisting}
+  utils/ann_framework/neuron.h
+  utils/ann_framework/neuron.cpp
+\end{lstlisting}
+the correct path and name of the corresponding test file is
+\begin{lstlisting}
+  tests/utils/ann_framework/neuron_test.cpp
+\end{lstlisting}
+Within your new test file, you have to include the header of the googletest
+framework and the headers necessary to perform your tests. For instance:
+\begin{lstlisting}
+  #include "gtest/gtest.h"
+  #include "utils/ann-framework/neuron.h"
+\end{lstlisting}
+Afterwards, just start to define your tests.
+
+When it comes to testing of projects, thins get a little more trickier.
+This is due to our standard of defining the simulation class within the 
+main.cpp.
+Unfortunately, every main.cpp typically also contains one main method and we 
+cant't link multiple objects that contain methods with the same name.
+The solution for this is a little hackish:
+Before including the main.cpp, which is necessary here, add two define 
+statements to override the name of the main method and the ThisSim class.
+The latter is neccessary to avoid identically named classes in different object
+files.
+The results might look like this:
+\begin{lstlisting}
+  #include "gtest/gtest.h"
+
+  // mask names of objects in global scope
+  #define main projects_nejihebi_example_main
+  #define ThisSim ProjectNejihebiExampleMainSim
+
+  #include "projects/nejihebi/example/sim/main.cpp"
+\end{lstlisting}
+Within the actual test of your project, you should run your simulation for an as
+short as possible time interval and check afterwards whether the relevant 
+parameters of the robot have the expected values.
+This might require too add some additional methods to the ThisSim class.
+Check out the test of the Nejihebi example project to get an idea how this might
+look like:
+\begin{lstlisting}
+  tests/projects/nejihebi_example_test.cpp
+\end{lstlisting}
