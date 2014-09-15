@@ -29,13 +29,13 @@ then
 	echo "sudo apt-get install git libncurses-dev"
 	sudo apt-get install git libncurses-dev
 
-	read -p 'Do you want to install drivers for the Hokuyo Laser Range Finder? [y/n]
+	read -p 'Do you want to install drivers for the Hokuyo Laser Range Finder? [y/n]: ' answer
 	if [ $answer = "y" ];
 	then
 		sudo apt-get install liburg0-dev
 	fi
 
-	read -p 'Do you want to install drivers for the xIMU Inertial Measurement Unit? [y/n]
+	read -p 'Do you want to install drivers for the xIMU Inertial Measurement Unit? [y/n]: ' answer
 	if [ $answer = "y" ];
 	then
 		#Installing driver for IMU USB sensor----Start

@@ -29,6 +29,11 @@ class EmptyController : public AbstractController {
 
       outputH1 = 0.001;
       outputH2 = 0.001;
+
+      // plot parameters using GUI "To display GUI, in terminal, type ./start -g 1 "
+      addInspectableValue("outputH1", &outputH1,"outputH1");
+      addInspectableValue("outputH2", &outputH2,"outputH2");
+
     };
 
 
@@ -71,32 +76,47 @@ class EmptyController : public AbstractController {
       assert(number_sensors >= 18);
       assert(number_motors >= 18);
 
+      //----Students--------Adding your Neural Controller here------------------------------------------//
+
+      // sensory inputs ,e.g, x_[FL_us] = left antenna, x_[FR_us] = right antenna (see also the list below)
+      // x_[G0x_s] , x_[G0y_s], x_[G0z_s] = relative position to reference object 1 (red ball)
+
+      // Final outputs of your controller should be set to the following y_[xx] parameters to control leg joints
+      //-----------------------------------------------------------------------------------------------//
+
 
       // generate motor commands
+
       // right rear coxa (knee) forward-backward joint (back is positive)
-      y_[TR2_m] = 0;
-      y_[CR2_m] = 0;
-      y_[FR2_m] = 0;
-      //left rear coxa (knee) forward-backward joint
+      y_[TR2_m] = 0; // TC  joint (forward-backward movements), e.g., y_[TR2_m] = 1 (move forward), -1 (move backward)
+      y_[CR2_m] = 0; // CTr joint (up-down movements), e.g., y_[CR2_m] = 1 (move up), -1 (move down)
+      y_[FR2_m] = 0; // FTi joint (extension-flexion movements), e.g., y_[CR2_m] = 1 (extension), -1 (flexion)
+
+      //left rear
       y_[TL2_m] = 0;
       y_[CL2_m] = 0;
       y_[FL2_m] = 0;
-      //right middle coxa (knee) forward-backward joint
+
+      //right middle
       y_[TR1_m] = 0;
       y_[CR1_m] = 0;
       y_[FR1_m] = 0;
-      //left middle coxa (knee) forward-backward joint
+
+      //left middle
       y_[TL1_m] = 0;
       y_[CL1_m] = 0;
       y_[FL1_m] = 0;
-      //right front coxa (knee) forward-backward joint
+
+      //right front
       y_[TR0_m] = 0;
       y_[CR0_m] = 0;
       y_[FR0_m] = 0;
-      //left front coxa (knee) forward-backward joint
+
+      //left front
       y_[TL0_m] = 0;
       y_[CL0_m] = 0;
       y_[FL0_m] = 0;
+
       // backbone joint
       y_[BJ_m] = 0;
 
@@ -178,7 +198,7 @@ class EmptyController : public AbstractController {
        L1_irs=30,
        L2_irs=28,
 
-       // goal orientation sensors (relative position to reference object 1, e.g. camera)
+       // goal orientation sensors (relative position to reference object 1 (red), e.g. camera)
        G0x_s=62,
        G0y_s=63,
        G0z_s=64,
@@ -188,13 +208,14 @@ class EmptyController : public AbstractController {
        BY_spd= 67,
        BZ_spd= 68,
 
-       // goal orientation sensors (relative position to reference object 2, e.g. camera)
+       // goal orientation sensors (relative position to reference object 2 (green), e.g. camera)
        G1x_s=72,
        G1y_s=73,
        G1z_s=74,
 
-       // goal orientation sensors (relative position to reference object 3, e.g. camera)
+       // goal orientation sensors (relative position to reference object 3 (blue), e.g. camera)
        G2x_s=78,
        G2y_s=79,
        G2z_s=80,
+
  */

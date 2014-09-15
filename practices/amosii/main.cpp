@@ -36,11 +36,6 @@
 // include the controller
 #include "emptycontroller.h"
 
-// OR an examplecontroller of previous students
-//#include "examplecontroller_d_buchwald.h"
-//#include "examplecontroller_m_schoeler.h"
-//#include "examplecontroller_t_ayala.h"
-
 
 // joint needed for fixation of the robot in the beginning
 #include <ode_robots/joint.h>
