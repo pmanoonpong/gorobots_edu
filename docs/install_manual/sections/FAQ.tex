@@ -72,7 +72,7 @@ You are using gorobots as a library build (``new makefile system'') and you
 are experiencing the following error while trying to compile, you are missing
 the highgui library development files of the opencv package:
 \begin{lstlisting}
-utils/real_robots/sensors/camera/CamTagPositionSensor.h:11:39: 
+utils/real_robots/sensors/camera/CamTagPositionSensor.h:11:39:
 fatal error: opencv2/highgui/highgui.hpp: No such file or directory
 \end{lstlisting}
 Install the missing package by typing:
@@ -81,7 +81,7 @@ $ sudo apt-get install libopencv-highgui-dev
 \end{lstlisting}
 
 \subsubsection{C++11 unknown}
-If you are trying to compile and obtain errors related to the flag 
+If you are trying to compile and obtain errors related to the flag
 \begin{lstlisting}
  -std=c++11
 \end{lstlisting}
@@ -92,11 +92,11 @@ gcc does not support the C++11 flag.
 If your version of Open Scene Graph it too recent, you may observe the following
 error while trying to compile lpzrobots:
 \begin{lstlisting}
-osg/osgprimitive.cpp:668:32: error: 
+osg/osgprimitive.cpp:668:32: error:
   'BIND_PER_PRIMITIVE' is not a member of 'osg::Geometry'
 \end{lstlisting}
 One quick fix for this is to just comment out line 668 in osg\/osgprimitive.cpp.
-Updating to a more recent version of lpzrobots would resolve the problem as 
+Updating to a more recent version of lpzrobots would resolve the problem as
 well.
 
 
@@ -119,9 +119,23 @@ The error messages was:
 > ./start: error while loading shared libraries: libode\_dbl.so.1:
   cannot open shared object file: No such file or directory
 \end{lstlisting}
+
+\begin{lstlisting}
+Basically when you compile lpz-robot to some local directory.
+The projects cannot start as they cannot locate "libode_dbl.so.1"
+A quick fix involves making a symbolic link (with root priviledge)
+that points to the file in your systems /lib/ library.
+\end{lstlisting}
+
 The solution was:
 \begin{lstlisting}
  > source ~/.bashrc
+\end{lstlisting}
+
+\begin{lstlisting}
+Another solution was:
+
+sudo ln -sf home/foo/lpzrobots/opende/ode/src/.libs/libode_dbl.so.1 /lib/libode_dbl.so.1
 \end{lstlisting}
 
 
@@ -145,7 +159,7 @@ The solution was:
 > .\start -f = record log file
 > .\start = start program
 > .\start -g 1 = display GUI
-\end{lstlisting} 
+\end{lstlisting}
 
 \subsection{Using EPuck Monitor}
 
@@ -163,4 +177,4 @@ $ sudo apt-get install qtdeclarative5-dev qt5-default
 > sudo usermod -a -G dialout username
 > Then restart your PC
 
-\end{lstlisting} 
+\end{lstlisting}
