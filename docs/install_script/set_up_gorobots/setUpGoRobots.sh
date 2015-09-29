@@ -90,7 +90,7 @@ then
 	echo  'export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$HOME/lib:/usr/lib/'$PFAD >> .bashrc
 	echo  'export PATH=${PATH}:$HOME/bin' >> .bashrc
 
-	echo "relaod .bashrc"
+	echo "reload .bashrc"
 	echo "source ${HOME}/.bashrc"
 	source ${HOME}/.bashrc
 else

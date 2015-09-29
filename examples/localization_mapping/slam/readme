@@ -1,0 +1,24 @@
+
+Make sure that you have already installed "libconfig++-dev"
+if not do:
+
+open synaptic and search "libconfig++-dev" and then install it!
+
+===Modifying the Makefile===
+
+Please change the path in the makefile of this directory:
+
+from 
+
+#Global path to gorobots directory
+GOROBOTS = /home/poma/workspace/pmanoonpong-gorobots-fork/
+
+to 
+
+#Global path to gorobots directory
+GOROBOTS = /home/xx your username xx /workspace/xxx-gorobots-fork/
+
+===Run the example===
+
+make
+./runSLAM

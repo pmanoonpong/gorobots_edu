@@ -1,0 +1,15 @@
+To interface with locokit
+
+Run server
+1) open terminal
+
+type: ssh root@192.168.1.192
+
+>>root@192.168.1.192's password: 
+ press enter
+
+>>root@overo:~# cd locokit_compile/
+>>root@overo:~/locokit_compile# ./actuateMotors
+
+2) Run the program
+./start

@@ -11,8 +11,54 @@ As "binutils-gold" contains a different linker for C++ files, which is optimized
 However, this new linker is not necessary for compiling and running lpzrobots, it just speeds up the compilation time.
 So the solution to the problem is simple: Uninstall "binutils-gold" and everything works.
 
+\subsection{Problem of displaying plots from Guilogger}
+If you cannot display any plots from Guilogger:\\
+\begin{lstlisting}
+You need to install gnuplot-x11
+"sudo apt-get install gnuplot-x11"
+\end{lstlisting}
+
+\subsection{Cannot complie Lpzrobots}
+
+\begin{lstlisting}
+If you cannot complie Lpzrobots, you may check in .bashrc\\
+You should have ``export PATH = /home/YOUR USER NAME/bin:$PATH''
+
+e.g., you should have all these in your .bashrc
+
+# definitions for lpzrobots
+export CPATH=``$HOME/include''
+export LIBRARY_PATH=``$HOME/lib''
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$HOME/lib:/usr/lib/osgPlugins3.0.1
+export PATH=${PATH}:$HOME/bin
+export PATH = /home/poma/bin:$PATH
+
+\end{lstlisting}
+
+
 
 \subsection{Errors using setUpGoRotobots.sh}
+
+\subsubsection{Fail to run setUpGoRotobots.sh}
+\begin{lstlisting}
+
+You might have to change permission ``chmod u+x setUpGoRobots.sh'' 
+if you cannot execute.
+
+You should also try to update your system.
+>> sudo apt-get update
+
+
+If you fail to clone using the script, you could
+clone directly as below (otherwise, skip this)
+
+>>/workspace$ git clone https://your user name@git.assembla.com/
+your user name-gorobots-fork.git -b master
+
+>>/workspace$ git clone https://your user name@git.assembla.com/
+your user name-lpzrobots-fork.git -b lpzrobots
+
+\end{lstlisting}
 
 \subsubsection{Error with \emph{git clone}}
 
@@ -135,7 +181,8 @@ The solution was:
 \begin{lstlisting}
 Another solution was:
 
-sudo ln -sf home/foo/lpzrobots/opende/ode/src/.libs/libode_dbl.so.1 /lib/libode_dbl.so.1
+"sudo ln -sf home/username/lpzrobots
+/opende/ode/src/.libs/libode_dbl.so.1 /lib/libode_dbl.so.1"
 \end{lstlisting}
 
 
@@ -178,3 +225,23 @@ $ sudo apt-get install qtdeclarative5-dev qt5-default
 > Then restart your PC
 
 \end{lstlisting}
+
+\subsection{Public key to push to assembla}
+\begin{lstlisting}
+
+For the first time to push from your PC to assembla, you need to
+
+1) Generate and upload your SSH key
+
+ssh-keygen -t rsa -C "your email"
+
+2) Copy public key (id_rsa.pub) into your Assembla Profile:
+https://www.assembla.com/user/edit/edit_git_settings
+
+Please also check instructions on assembla:
+
+https://www.assembla.com/spaces/dshaikh-gorobots-fork/git/instructions
+
+\end{lstlisting}
+
+

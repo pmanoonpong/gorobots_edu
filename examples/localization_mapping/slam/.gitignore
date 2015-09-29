@@ -1,0 +1,13 @@
+/data/
+/sensorData/
+/backup_simSLAM.cpp
+/circle_Old.map
+/circle.map
+/simSLAM
+/test.map
+/U-shape_half.map
+/U-shape.map
+/valgrind.dat
+/orientationAcc.dat
+/orientationVelo.dat
+/runSLAM

@@ -1,0 +1,115 @@
+Make sure that you have already installed "libconfig++-dev"
+if not do:
+
+open synaptic and search "libconfig++-dev" and then install it!
+
+
+===Installation===
+Access to the xIMU is provided by FTDI (http://www.ftdichip.com/Drivers/D2XX.htm). To install these drivers run:
+
+	wget -q "http://www.ftdichip.com/Drivers/D2XX/Linux/libftd2xx1.1.12.tar.gz"
+	mkdir ftdi
+	tar -xf libftd2xx1.1.12.tar.gz -C ftdi
+
+Now choose the drivers corresponding to your cpu architecture, copy them to usr/local/lib and create symbolic links
+
+Check your PC by:
+
+uname –m
+
+This displays only the machine hardware name and indicates, as above, whether your system is 32-bit (“i686” or “i386”) or 64-bit (“x86_64”).
+
+If you have 
+	//64 Bit
+	sudo cp -r ftdi/release/build/x86_64/lib* /usr/local/lib 2>&1 
+	
+If you have 
+	//32 Bit
+	sudo cp -r ftdi/release/build/i386/lib* /usr/local/lib 2>&1
+	
+	sudo chmod 0755 /usr/local/lib/libftd2xx.so.1.1.12
+	sudo ln -sf /usr/local/lib/libftd2xx.so.1.1.12 /usr/local/lib/libftd2xx.so
+
+Furthermore, boost is needed:
+
+	sudo apt-get install libboost-all-dev
+
+The FTDI might intefere with other USB devices. To solve this problem temporarily, run the following after plugging in the IMU
+
+	sudo rmmod ftdi_sio
+	sudo rmmod usbserial
+
+By using udev rules a constant solution can be achieved. Create a file called "81-xIMU.rules" in /etc/udev/rules.d/ and copy 
+the following line to the file 
+
+	ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{product}=="FT232R USB UART", RUN+="/bin/sh -c 'echo $kernel > /sys/bus/usb/drivers/ftdi_sio/unbind'"
+
+Then restart udev via
+
+	sudo /etc/init.d/udev restart
+
+
+===Compilation===
+Compile the programs with the IMU with the following options
+
+	-lboost_thread -lboost_system -lconfig++ -lftd2xx -lstdc++ -lm
+
+and make sure to include the path to the source directory (utils/real_robots/sensors/IMU). It is recommanded to use the Makefile in this folder as a template
+
+===Modifying the Makefile===
+
+Please change the path in the makefile of this directory:
+
+from 
+
+#Global path to gorobots directory
+GOROBOTS = /home/poma/workspace/pmanoonpong-gorobots-fork/
+
+to 
+
+#Global path to gorobots directory
+GOROBOTS = /home/xx your username xx /workspace/xxx-gorobots-fork/
+
+
+===Run the example===
+Compile the example by using make and run via
+
+	sudo ./testXIMU
+
+The sudo command is necessary to be able to access the USB port.
+If the xIMU is connected successfully, it will calibrate itself to compensate for possible offsets, then take 1000 measurements and write them to "testXIMU.dat"
+
+
+===Modifying the Makefile===
+
+Please change the path in the makefile of this directory:
+
+from 
+
+#Global path to gorobots directory
+GOROBOTS = /home/poma/workspace/pmanoonpong-gorobots-fork/
+
+to 
+
+#Global path to gorobots directory
+GOROBOTS = /home/xx your username xx /workspace/xxx-gorobots-fork/
+
+
+
+===Some Background===
+The Ximu class acquires data continously after being started by ximu.startReading(). It will do so in its own thread (by using boost::thread). All data is processed (compensating offsets,
+integrating for velocities, position, heading and so on) and then stored in class variables. These can be read at any time. However, when the xIMU is still reading
+they may change during access. Reading can be stopped via ximu.stopReading(). This terminates the background thread. Reading may also be paused for a specified timespan
+in ms by ximu.pause(int ms).
+The measurements of xIMU may contain offsets (e.g. gravitation). To compensate for these offsets, a calibration is recommanded before measuring. During this calibration samples
+are taken and evaluated by the xIMU. Afterwards the xIMU should return (near) zero acceleration in all directions when not moved.
+The necessary offset parameters can also be read from file. For further information see ximuAccess.h and ximuAccess.cpp.
+The xIMU may use a low pass filter to reduce noise. The weight for this filter may also be passed through a parameter file. The filter is disabled per default.
+
+===IMPORTANT NOTES===
+This class was mainly used to acquire accelerations and velocities (translational and rotational) with the xIMU. The integration for positions and orientations is not tested 
+thoroughly and may contain errors/bugs. In particular, the structure of the class is not as 'idot-proof' as it could be. The thread handling is rudimentary, many data
+objects are publicy available, which should be private and the general flow/structure of the class is too complex. Be careful, when accessing such data, while the xIMU is still taking measurements.
+Furthermore, it should be possible to send commands to the xIMU, e.g. to change the sample rate or accuracy. However, this is not yet implemented. A complete project for
+Visual C++ can be found under https://github.com/xioTechnologies/x-IMU-GUI.
+Note that, the xIMU class will store all measured values. With a default sample rate of 256 Hz the corresponding arrays may become too large after a few minutes of non-stop reading.
