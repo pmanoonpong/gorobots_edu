@@ -11,7 +11,117 @@
  *      e.g., 400 time steps * 0.0372 = 14.88 seconds
  *
  *      19 April 2013 last update test1
+ *
+ *
+ *      This program is for collaboration between SUD (Poramate Manoonpong's group) and UNICT (Paolo Arena's group)
+ *      14.09.2019
+ *
  */
+
+
+
+
+
+/*
+Learning internal model from RC
+
+Search for -------------------------------SET RC
+
+1 set below
+
+//RC network setup---------------------------------------------------------------//
+loadweight = false; // true = use learned weights, false = let the RC learn
+learn = true; // true = learning, false = use learned weights
+
+//LTM option
+ltm_v1 = false;//true; // learn pattern
+ltm_v2 = false;//true;  // learn frequency
+ltm_v3 = true;//false;  // learn weights
+
+
+crossing_gap = false;
+
+Can be set to learn one or three gaits
+bool singlegait = false; //false = learn 3 gaits, ture = learn only one gait
+
+
+2
+
+  //Selecting forward models
+  option_fmodel = 6; // 4 (simple single neuron) or 6 = RC networks
+  sequentiral_learning = true;// learn multiple gait one after the other, false = learn only one gait
+
+3
+
+run simulation
+
+4 after finsh: after learning, you will get all wrights
+as iinner_weights_111.txt, 112.txt,..., 323.txt and these files will be used for loading weights after learning
+
+
+Plotting to check
+
+gnuplot> plot 'NeurallocomotionR0.dat' using 1:6 with lines,\
+>'NeurallocomotionR0.dat' using 1:3 with lines
+
+
+1:3 = target signal = reflex_R_fs.at(1)
+1:6 = output signal = ESTrainOutput_R1[2] of tripod gait
+1:5 = output signal = ESTrainOutput_R1[2] of tetrapod gait
+1:4 = output signal = ESTrainOutput_R1[2] of wave gait
+
+
+
+        outFilenlc1<<global_count<<' '<<
+            Control_input<<' '<<
+            reflex_R_fs.at(1)<<' '<<
+            ESTrainOutput_R1[0]<<' '<<
+            ESTrainOutput_R1[1]<<' '<<
+            ESTrainOutput_R1[2]<<' '<<
+            ESinput_R1[0]<<' '<<
+            fmodel_cmr1_output_rc.at(2)<<' '<<
+            fmodel_cmr1_output_rc.at(1)<<' '<<
+            fmodel_cmr1_output_rc.at(0)<<' '<<
+            fmodel_cmr_output_rc.at(1)<<' '<<endl;
+
+
+
+*/
+
+
+/*
+For testing
+1 set below
+
+//RC network setup---------------------------------------------------------------//
+loadweight = true; // true = use learned weights, false = let the RC learn
+learn = false; // true = learning, false = use learned weights
+
+//LTM option
+ltm_v1 = false;//true; // learn pattern
+ltm_v2 = false;//true;  // learn frequency
+ltm_v3 = true;//false;  // learn weights
+
+
+crossing_gap = false;
+
+2
+
+  //Selecting forward models
+  option_fmodel = 6; // 4 (simple single neuron) or 6 = RC networks
+  sequentiral_learning = true;// learn multiple gait one after the other, false = learn only one gait
+
+3
+
+run simulation
+
+
+*/
+
+
+
+
+
 
 #include "NeuralLocomotionControlAdaptiveClimbing.h"
 
@@ -130,7 +240,7 @@ NeuralLocomotionControlAdaptiveClimbing::NeuralLocomotionControlAdaptiveClimbing
   //Testing controller from text (e.g. SOINN control as motor memory network)
   reading_text_testing = false;
 
-  crossing_gap = true; // if set gap crossing --> on, searching and elevator reflex have to switch off
+  crossing_gap = false; // if set gap crossing --> on, searching and elevator reflex have to switch off
 
   if(crossing_gap)
   {
@@ -141,21 +251,25 @@ NeuralLocomotionControlAdaptiveClimbing::NeuralLocomotionControlAdaptiveClimbing
   }
 
   //RC network setup---------------------------------------------------------------//
-  loadweight = true; // true = use learned weights, false = let the RC learn
-  learn = false; // true = learning, false = use learned weights
+  loadweight = false; // true = use learned weights, false = let the RC learn -------------------------------SET RC
+  learn = true; // true = learning, false = use learned weights -------------------------------SET RC
 
   //LTM option
   ltm_v1 = false;//true; // learn pattern
-  ltm_v2 = true;//true;  // learn frequency
-  ltm_v3 = false;//false;  // learn weights
+  ltm_v2 = false;//true;  // learn frequency
+  ltm_v3 = true;//false;  // learn weights
 
   //Save files
+
+  //Save RC readout weight of each CTR motors
   outFilenlc1.open("NeurallocomotionR0.dat");
   outFilenlc2.open("NeurallocomotionR1.dat");
   outFilenlc3.open("NeurallocomotionR2.dat");
   outFilenlc4.open("NeurallocomotionL0.dat");
   outFilenlc5.open("NeurallocomotionL1.dat");
   outFilenlc6.open("NeurallocomotionL2.dat");
+
+
   outFilenlc_tc.open("NeurallocomotionTC.dat");
   outFilenlc_ctr.open("NeurallocomotionCTR.dat");
   outFilenlF_fti.open("NeurallocomotionFTI.dat");
@@ -821,7 +935,7 @@ NeuralLocomotionControlAdaptiveClimbing::NeuralLocomotionControlAdaptiveClimbing
   ESN_R0->autocorr = pow(10,4); //set as high as possible, default = 1
   ESN_R0->InputWeightRange = 0.1; // scaling of input to hidden neurons, default 0.15 means [-0.15, +0.15]
   ESN_R0->LearnMode = 1; //1;//RLS = 1. LMS =2
-  ESN_R0->Loadweight = false; // true = loading learned weights
+  ESN_R0->Loadweight = false; // true = loading learned weights -------------------------------SET RC
   ESN_R0->NoiseRange = 0.001; //
   ESN_R0->RCneuronNoise = false; // false = constant fixed bias, true = changing noise bias every time
 
@@ -859,7 +973,7 @@ NeuralLocomotionControlAdaptiveClimbing::NeuralLocomotionControlAdaptiveClimbing
   ESN_R1->autocorr = pow(10,4); //pow(10,4); set as high as possible, default = 1
   ESN_R1->InputWeightRange = 0.1; // scaling of input to hidden neurons, default 0.15 means [-0.15, +0.15]
   ESN_R1->LearnMode = 1; //1;//RLS = 1. LMS =2
-  ESN_R1->Loadweight = false; // true = loading learned weights
+  ESN_R1->Loadweight = false; // true = loading learned weights -------------------------------SET RC
   ESN_R1->NoiseRange = 0.001; //
   ESN_R1->RCneuronNoise = false; // false = constant fixed bias, true = changing noise bias every time
 
@@ -898,7 +1012,7 @@ NeuralLocomotionControlAdaptiveClimbing::NeuralLocomotionControlAdaptiveClimbing
   ESN_R2->autocorr = pow(10,4); //pow(10,4); set as high as possible, default = 1
   ESN_R2->InputWeightRange = 0.1; // scaling of input to hidden neurons, default 0.15 means [-0.15, +0.15]
   ESN_R2->LearnMode = 1; //1;//RLS = 1. LMS =2
-  ESN_R2->Loadweight = false; // true = loading learned weights
+  ESN_R2->Loadweight = false; // true = loading learned weights -------------------------------SET RC
   ESN_R2->NoiseRange = 0.001; //
   ESN_R2->RCneuronNoise = false; // false = constant fixed bias, true = changing noise bias every time
 
@@ -937,7 +1051,7 @@ NeuralLocomotionControlAdaptiveClimbing::NeuralLocomotionControlAdaptiveClimbing
   ESN_L0->autocorr = pow(10,4); //pow(10,4); set as high as possible, default = 1
   ESN_L0->InputWeightRange = 0.1; // scaling of input to hidden neurons, default 0.15 means [-0.15, +0.15]
   ESN_L0->LearnMode = 1; //1;//RLS = 1. LMS =2
-  ESN_L0->Loadweight = false; // true = loading learned weights
+  ESN_L0->Loadweight = false; // true = loading learned weights -------------------------------SET RC
   ESN_L0->NoiseRange = 0.001; //
   ESN_L0->RCneuronNoise = false; // false = constant fixed bias, true = changing noise bias every time
 
@@ -976,7 +1090,7 @@ NeuralLocomotionControlAdaptiveClimbing::NeuralLocomotionControlAdaptiveClimbing
   ESN_L1->autocorr = pow(10,4); //pow(10,4); set as high as possible, default = 1
   ESN_L1->InputWeightRange = 0.1; // scaling of input to hidden neurons, default 0.15 means [-0.15, +0.15]
   ESN_L1->LearnMode = 1; //1;//RLS = 1. LMS =2
-  ESN_L1->Loadweight = false; // true = loading learned weights
+  ESN_L1->Loadweight = false; // true = loading learned weights -------------------------------SET RC
   ESN_L1->NoiseRange = 0.001; //
   ESN_L1->RCneuronNoise = false; // false = constant fixed bias, true = changing noise bias every time
 
@@ -1015,7 +1129,7 @@ NeuralLocomotionControlAdaptiveClimbing::NeuralLocomotionControlAdaptiveClimbing
   ESN_L2->autocorr = pow(10,4); //pow(10,4); set as high as possible, default = 1
   ESN_L2->InputWeightRange = 0.1; // scaling of input to hidden neurons, default 0.15 means [-0.15, +0.15]
   ESN_L2->LearnMode = 1; //1;//RLS = 1. LMS =2
-  ESN_L2->Loadweight = false; // true = loading learned weights
+  ESN_L2->Loadweight = false; // true = loading learned weights -------------------------------SET RC
   ESN_L2->NoiseRange = 0.001; //
   ESN_L2->RCneuronNoise = false; // false = constant fixed bias, true = changing noise bias every time
 

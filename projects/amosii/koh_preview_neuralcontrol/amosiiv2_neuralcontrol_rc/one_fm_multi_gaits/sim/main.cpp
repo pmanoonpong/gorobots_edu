@@ -50,7 +50,7 @@ std::vector<lpzrobots::AbstractObstacle*> obst;
 // add head file for creating a sphere by Ren ------------
 
 
-bool gapcrossing_experiment_setup;
+bool gapcrossing_experiment_setup; // set to false = normal terrain, true = two platforms with a gap in between
 
 class ThisSim : public lpzrobots::Simulation {
   public:
@@ -95,7 +95,7 @@ class ThisSim : public lpzrobots::Simulation {
     playgroundHandle.substance = lpzrobots::Substance(0.5/* 3.0 roughness*/, 0.0/*0 slip*/, 100.0/* 50 hardness*/, 0.0/*elasticity*/); //substance for playgrounds (NON-SLIPPERY!!!)
 
     //EXPERIMENTAL SETUP 1: SINGLE OBSTACLE (Adaption to different obstacle altitudes and walking gaits)
-    gapcrossing_experiment_setup = true;
+    gapcrossing_experiment_setup = false;
     int obtacle_no = 2; // set to 1 for learning and set to 2 for two platforms
     double gap_distance = 2.25;//2.22; // 2.3 fail!!
     double size = 1.0; // set to 100 for learning and set to 1.0 for gap crossing experiment
