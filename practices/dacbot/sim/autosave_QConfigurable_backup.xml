@@ -1,0 +1,66 @@
+<!DOCTYPE ConfigurableStateTypeDefinition>
+<ConfigurableStates>
+ <ConfigurableState name="Simulation Environment_0">
+  <ConfigurableWidget tileWidgetWidth="210" isCollapsed="false" numberOfTilesPerRow="3">
+   <ConfigurableTileWidgets>
+    <ConfigurableTileWidget gridRow="0" gridColumn="0" name="cameraspeed" isVisible="true"/>
+    <ConfigurableTileWidget gridRow="0" gridColumn="1" name="commandline" isVisible="true"/>
+    <ConfigurableTileWidget gridRow="0" gridColumn="2" name="controlinterval" isVisible="true"/>
+    <ConfigurableTileWidget gridRow="1" gridColumn="0" name="fps" isVisible="true"/>
+    <ConfigurableTileWidget gridRow="1" gridColumn="1" name="gravity" isVisible="true"/>
+    <ConfigurableTileWidget gridRow="1" gridColumn="2" name="logwhilerecording" isVisible="true"/>
+    <ConfigurableTileWidget gridRow="2" gridColumn="0" name="noise" isVisible="true"/>
+    <ConfigurableTileWidget gridRow="2" gridColumn="1" name="randomseed" isVisible="true"/>
+    <ConfigurableTileWidget gridRow="2" gridColumn="2" name="realtimefactor" isVisible="true"/>
+    <ConfigurableTileWidget gridRow="3" gridColumn="0" name="simstepsize" isVisible="true"/>
+   </ConfigurableTileWidgets>
+  </ConfigurableWidget>
+  <Configurable revision="$Id$" id="846930886" name="Simulation Environment" autosaveFunction="1">
+   <!--While in autosave mode, only values, bounds and descriptions of parameters which are differing from their original values are stored.-->
+   <paramvals>
+    <paramval name="cameraspeed"/>
+    <paramval name="fps"/>
+    <paramval name="gravity"/>
+    <paramval name="noise"/>
+    <paramval name="randomseed"/>
+    <paramval name="realtimefactor"/>
+    <paramval name="simstepsize"/>
+   </paramvals>
+   <paramints>
+    <paramint name="controlinterval"/>
+   </paramints>
+   <parambools>
+    <parambool name="commandline"/>
+    <parambool name="logwhilerecording"/>
+   </parambools>
+  </Configurable>
+ </ConfigurableState>
+ <ConfigurableState name="muscleRunbotController_0">
+  <ConfigurableWidget tileWidgetWidth="210" isCollapsed="false" numberOfTilesPerRow="3">
+   <ConfigurableTileWidgets>
+    <ConfigurableTileWidget gridRow="0" gridColumn="0" name="Mass" isVisible="true"/>
+    <ConfigurableTileWidget gridRow="0" gridColumn="1" name="UBC" isVisible="true"/>
+   </ConfigurableTileWidgets>
+  </ConfigurableWidget>
+  <Configurable revision="0.1" id="948602287" name="muscleRunbotController" autosaveFunction="1">
+   <!--While in autosave mode, only values, bounds and descriptions of parameters which are differing from their original values are stored.-->
+   <paramvals>
+    <paramval name="Mass"/>
+    <paramval name="UBC"/>
+   </paramvals>
+   <paramints/>
+   <parambools/>
+  </Configurable>
+ </ConfigurableState>
+ <ConfigurableState name="Runbot_0">
+  <ConfigurableWidget isCollapsed="false" numberOfTilesPerRow="3">
+   <ConfigurableTileWidgets/>
+  </ConfigurableWidget>
+  <Configurable revision="revision 1.0" id="1362250833" name="Runbot" autosaveFunction="1">
+   <!--While in autosave mode, only values, bounds and descriptions of parameters which are differing from their original values are stored.-->
+   <paramvals/>
+   <paramints/>
+   <parambools/>
+  </Configurable>
+ </ConfigurableState>
+</ConfigurableStates>

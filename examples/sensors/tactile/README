@@ -1,0 +1,56 @@
+
+
+1) Install  sudo apt-get install python-pip
+
+----Search opencv homebrew python, 2016
+
+For MAC
+http://www.pyimagesearch.com/2016/12/19/install-opencv-3-on-macos-with-homebrew-the-easy-way/
+
+For Ubuntu
+http://www.pyimagesearch.com/2015/07/20/install-opencv-3-0-and-python-3-4-on-ubuntu/
+
+2) Install opencv if you do not have!!
+
+3) Install python if you do not have!! 
+
+
+------
+
+To run the sensor
+
+1) Power the sensor then you should see three LEDs:  Red, Blue, and Yellow
+If Blue blinking, then something wrong!!! --> ask Alin
+ 
+2) Connect tactileAP , password tactile0
+
+3) check IP, .100 
+Setup IP address
+
+IP 192.168.100
+Netmask 255.255.255.0
+
+4) Run the program
+poma@poma-HP-EliteBook-840-G1:~/workspace/pmanoonpong-gorobots-fork/examples/sensors/tactile$ python ctakt_multiple.py 
+
+poma@poma-HP-EliteBook-840-G1:~/workspace/pmanoonpong-gorobots-fork/examples/sensors/tactile$ python ctakt_multiple.py 
+starting up on 192.168.1.100 port 10001
+starting up on 192.168.1.100 port 10002
+starting up on 192.168.1.100 port 10003
+data received
+starting up on 192.168.1.100 port 10004
+starting up on 192.168.1.100 port 10005
+starting up on 192.168.1.100 port 10006
+>> v
+>> l
+Saving to file started
+>> l
+Saving to file ended
+>> 
+
+
+If it cannot save data:
+Check your openCV and use the latest version of openCV
+
+
+

@@ -1,0 +1,290 @@
+\documentclass{article}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{framed}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  breakindent=6em,
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,                    % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=C++,                 % the language of the code
+  morekeywords={Particle, vector, SLAMSolver, MeasurementModel, MotionModel, MapModel, OdometryModel, RangeFinder, LikelihoodField, OccupancyGrid, KLDParameters},
+  numbers=none,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=2,                       % sets default tabsize to 2 spaces
+  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
+\lstdefinestyle{customc}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=L,
+  xleftmargin=\parindent,
+  language=C,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+
+\newcommand{\SLAM}{\texttt{SLAMSolver} class }
+
+\begin{document}
+\begin{framed}
+\centering
+      \Huge{Manual for the \\ \SLAM}
+ \end{framed}
+\tableofcontents
+\newpage
+\section{Introduction}
+The \SLAM implements algorithms for solving the localization and SLAM (Simultaneous Localization and Mapping) problem of a robot. The algorithms are motivated by \textit{Probabilistic Robotics}. This means, the environment, the robot and the state of the robot are represented by probabilistic models. All algorithms and models in this class are based on the book 'Probabilistic Robotics' by Thrun/Burgard/Fox. Further details and background information concering all topics mentioned in this manual can be found in this book or in my Master's Thesis (thesis.pdf). 
+\section{Features and Usage of \SLAM}
+\subsection{Namespace}
+The complete implementation, that is the core \SLAM and all models are combined into the \texttt{SLAM} namespace. All further implementation should be added to this namespace as well.
+
+\subsection{Particle Filters}
+The basic principle of the SLAM and Localization algorithms in this program are \textit{Particle Filters}. At each point in time the current state of the robot is given by a probability distribution over all possible states. This distribution is called \textit{belief} of the robot. It is represented by a set of samples drawn from the distribution. Each sample is called \textit{particle} and can be seen as one possible state of the robot. Furthermore, each particle may carry an individual map of the environment and a weight. The weight specifies, how probable the state (and the map) of the particle is (that is, how good it fits to the current measurement and motion of the robot). In this program, a particle is defined through its own structure:
+\begin{lstlisting}
+struct Particle{   
+    //State of the robot
+    vector<double> state; 
+    //Weight of the particle
+    double weight; 
+    //Map belonging to the particle
+    Grid<double> map; 
+};
+\end{lstlisting}
+Consequently, the algorithm to update the belief based on measurements and motion of the robot is called \textit{Particle Filter}. As already mentioned the general idea of particle filters is to update the belief of the robot based on the current range measurement of the environement and based on the current motion of the robot.\newpage 
+The particle filter algorithm needs three models.
+\begin{enumerate}
+  \item Motion Model
+  \item Measurement Model
+  \item Mapping
+\end{enumerate} 
+These models are the core of the \SLAM. The behaviour of each model is defined by a set of parameters. These parameters are specific to every model. All models are represented through abstract classes (measurementModelAbstract.h, motionModelAbstract.h, mapModelAbstract.h), which can all be found in utils/SLAM/Models. Thus, to construct a new instance of the \SLAM four arguments are necessary: the three models and the initial belief of the robot. 
+\begin{lstlisting}
+SLAMSolver(vector<Particle> initBelief, MeasurementModel* measureModel, MotionModel* motionModel, MapModel* mapModel);
+\end{lstlisting}
+Each model must provide one specific method, which is called by the particle filter. This method defines the model.
+\begin{lstlisting}
+for(int i = 0; i < this->numberParticles; i++){
+    //Sample according to motion model
+    state = this->motionModel->sample(control, this->currentBelief[i].state);
+    //Compute weights based on measurement. Use individual map of each particle
+    weights[i] = this->measureModel->computeWeight(measurement, state, this->currentBelief[i].map);
+    //Update map 
+    this->mapModel->updateMap(measurement, state, this->currentBelief[i].map);
+    //Add particle to temp list
+    tempBelief[i] = Particle(state, weights[i], this->currentBelief[i].map);
+    }
+\end{lstlisting}
+\newpage
+\subsection{Probabilistic Models}
+Concrete implementations for each model are available. There two motion models (the Velocity Model (velocityModel.h) and the Odometry Model (odometryModel.h)), one measurement model (Likelihood fields in likelihoodFields.h) and one two mappings models (occupancyGrid.h and occupancyGridBresenham.h). As mentioned before, all models have specific parameters. These parameters can either be given directly to the class in form of a vector or can be read from a parameter file. 
+\begin{lstlisting}
+//Construct from parameters file
+OdometryModel odometryModel1("parameters.cfg");
+//Construct from vector
+vector<double> parameters(4);
+parameters[0] = 0.0;
+parameters[1] = 0.0;
+parameters[2] = 0.1;
+parameters[3] = 0.1;
+OdometryModel odometryModel2(parameters);
+\end{lstlisting}
+The meaning of the parameters is explained in the corresponding header file, as well as the structure of the parameter file. There are some models, e.g. Likelihood Fields, which require additional constructor arguments. The complete initialization of the \SLAM could look like this.
+\begin{lstlisting}
+//Here all necessary parameters are stored in one file
+const char* cfgFileName =  "parameters.cfg"; 
+//Instance of a range finder.
+//It also needs parameters, which define its behaviour.
+RangeFinder rf(cfgFileName);
+//Models for the particle filter
+OdometryModel odometryModel(cfgFileName);
+LikelihoodField lField(cfgFileName,&rf);
+OccupancyGrid occMap(cfgFileName,&rf);
+//Init SLAMSolver class
+SLAMSolver mySLAM(particles,&lField, &odometryModel, &occMap);
+\end{lstlisting} 
+\newpage
+\subsection{Belief Update}
+Now, the initial belief should be updated based on new measurements from the range finder and the motion of the robot. Measurements from the range finder are just vectors of numbers, which correspond to range readings at different angles. Further information about the order of readings, angular convention and the relation of the measurement vector to the RangeFinder class can be found in utils/SLAM/rangeFinder.h. The motion of the robot is defined through a so called \textit{Control Action}. The meaning of the control action is different for each motion model. In case of the Odometry Model the control action contains the previous and estimated current state of the robot. Again, further details about the motion models can be found in the corresponding header file, the book 'Probabilistic Robotics' or my Master's Thesis (thesis.pdf). One step of the particle filter could look like this
+\begin{lstlisting}
+//Measurement obtained from the range finder
+vector<double> measurement = ...;
+//Previous and current state of the robot
+vector<double> prevState = ...;
+vector<double> currState = ...;
+//Set up control action for odometry model
+vector<double> control = currState;
+control.insert(control.end(), prevState.begin(), prevState.end());
+//Perform SLAM step with current measurement and control action
+mySLAM.fastSlamStep(control, measurement);
+\end{lstlisting}
+At this point, the belief of the robot is updated and can be stored or directly written to a file:
+\begin{lstlisting}
+//Store belief in vector
+vector<Particle> particles = mySLAM.getBelief();
+//Write belief to file
+mySLAM.writeBelief("belief.dat");
+\end{lstlisting}
+The \SLAM is also available to perform localization only. In this case, the method \texttt{MCL\_step()} is to be used. This method is similar to \texttt{fastSlamStep()}, but takes an additional map as input. This map is assumed to be a 'true' representation of the environment and is point[0] = -1.0;not changeable. Maps of individual particles are ignored.
+\begin{lstlisting}
+//SLAM step
+mySLAM.fastSlamStep(control, measurement);
+//MCL step
+mySLAM.MCL_step(control, measurement, map);
+\end{lstlisting}
+\newpage
+\subsection{KLD-Sampling}
+A naive particle filter uses a fixed number of particles to represent the current belief of the robot. However, this is inefficient. It would be better, if the number of particles were to adapt to the uncertainty in the belief. To achieve this the \SLAM implements a technique called \textit{KLD-Sampling}. It is a modification to the particle filter, which changes the number of particles to optimally cover the complete state space of the robot. KLD-Sampling relies on a number of parameters, which is passed to the \SLAM via an individual object.
+\begin{lstlisting}
+KLDParameters kldParam("parameters.cfg");
+SLAMSolver mySLAM(particles,&lField, &odometryModel, &occMap, &kldParam);
+\end{lstlisting}  
+As with the probabilistic models, KLDParameters can also be initialized directly with a parameter vector. Further details about the parameters and KLD-sampling in general can be found in SLAMSolver.h, 'Probabilistic Robotics' or the appendix of thesis.pdf. If an object of KLDParameters is passed as constructor argument to the \SLAM, KLD-Sampling is automatically enabled, otherwise it is disabled per default. However, it is possible to disable/enable KLD-sampling:
+\begin{lstlisting}
+KLDParameters kldParam("parameters.cfg");
+//KLD-Sampling is now disabled
+SLAMSolver mySLAM(particles,&lField, &odometryModel, &occMap);
+//Enable KLD-Sampling with given parameter set
+mySLAM.enableKLD(&kldParam);
+//Check
+bool bKLD = mySLAM.isUsingKLD();
+//Disable again
+mySLAM.disableKLD();
+\end{lstlisting}
+\newpage
+\subsection{Control Actions, Measurements and States}
+The \SLAM is designed to be as abstract and general as possible. Thus, it does not make any assumptions about the concrete form of control actions, measurements, states and the corresponding probabilistic models. This is also the reason, why all models are implemented as abstract classes and many quantities are represented through 'abstract' vectors. The user of the \SLAM has to make sure, that the structure of the states, control actions and measurements fits the corresponding models. For example, the odometry model expects two states of a 2D environment at different times combined in one control vector.
+\begin{lstlisting}
+vector<double> prevState(3);
+//X coordinate at time t-1
+prevState[0] = xPrev;
+//Y coordinate at time t-1
+prevState[1] = yPrev;
+//Heading direction at t-1
+prevState[2] = thetaPrev;
+vector<double> currState(3);
+//X coordinate at time t
+currState[0] = xCurr;
+//Y coordinate at time t
+currState[1] = yPrev;
+//Heading direction at t
+currState[2] = thetaPrev;
+//Create corresponding control actioni
+vector<double> control = currState;
+control.insert(control.end(), prevState.begin(), prevState.end());
+//Perform SLAM step
+mySLAM.fastSlamStep(control, measurement);
+\end{lstlisting}
+Any other input would be misinterpreted by the odometry model. The user should be aware of the structure of the states, control actions and measurements and the expected input to the individual models. Discrepancies may lead to crashing programs or faulty results. If using any already implemented models, check the corresponding source files for the expected input. Consequently, if writing new models, make sure to properly document the assumed structure of inputs. Note that, data acquisition is not part of \SLAM. It just takes the obtained data (in whatever way) and computes corresponding results. 
+\newpage
+\subsection{Map Representation}
+In the \SLAM occupancy grid maps are used. However, the included grid class provided by grid.h is much more general. This class can represent any n-dimensional grid. This grid is made up of cells. The implementation of the Cell class can also be found in grid.h. Each cell consists of three properties:
+\begin{enumerate}
+  \item N-dimensional coordinate of the bottom-left corner of the cell
+  \item Size of the cell in each dimension
+  \item Value of the cell
+\end{enumerate}
+The cell class is written as a template class, where the type of the cell value is given through the template parameter. \\
+A grid can be initialized in two different ways. First, it can be constructed by providing a start (the bottom left corner) and end (top right corner) point, as well as the size of one grid in each dimension and the initial value of each cell.
+\begin{lstlisting}
+//Create 2D grid with bottom left corner at (0,0) and top right corner at (5,10).
+vector<double> start(2);
+start[0] = 0.0;
+start[1] = 0.0;
+vector<double> end(2);
+end[0] = 5.0;
+end[1] = 10.0;
+//Specify size of each grid cell. First value is size in first dimensions, second value in second dimension and so on
+vector<double> resolution(2);
+//Here we create a grid with a resolution of 0.5 in the first dimension and a resolution of 1. in the second dimension
+resolution[0] = 0.5;
+resolution[1] = 1.;
+//Specifiy the intial value of cell
+double startValue = 0.0;
+//Init grid with template parameter as double
+Grid<double> map(start,end,resolution, startValue);
+\end{lstlisting} 
+Second, a grid can be initialized from file. Consequently an existing grid may be stored into a file, too.
+\begin{lstlisting}
+//Write existing map to file
+map.writeToFile("test.map");
+//Init map from file. Make sure, that the template parameter matches the values of the previously stored map
+Grid<double> copyMap("test.map");
+\end{lstlisting}
+Make sure, that the type of the new map matches the type of the previously stored map. \\
+The grid class provides access to grid cells by specifying n-dimensional points.
+\begin{lstlisting}
+vector<double> point(2);
+point[0] = 4.3;
+point[1] = 2.4;
+//Set cell value at given point to 5
+//Returns true since point is inside map
+bool bAccess = map.setCellValue(point, 5.);
+//Read cell value at given point
+//Returns true since point is inside map
+double value;
+bool bAccess2 = map.getCell(point, value);
+//Try to access point outside map
+point[0] = -1.0;
+point[1] = -1.0;
+//Returns false and value is not changed
+bool bAccess3 = map.getCellValue(point, value);
+\end{lstlisting}
+Both methods return a boolean value, which indicates, if the provided point is inside the map or not.
+\newpage
+\section{Getting the \SLAM to run}
+Two prerequisite are necessary to be able to use the \SLAM: \href{http://www.boost.org/}{Boost} and \href{http://www.hyperrealm.com/libconfig/}{libconfig++}. Under Linux, Boost can be easily installed via package managers. Either open the installed package manager and manually search for the latest boost package or run the following command
+\begin{lstlisting}
+sudo apt-get install libboost-all-dev
+\end{lstlisting}
+The same goes for libconfig++. Either use the installed package manager or run:
+\begin{lstlisting}
+sudo apt-get install libconfig++-dev
+\end{lstlisting}
+Compile the program with \texttt{-lboost\_system -lconfig++}. Furthermore the path to the source files must be added to the include list \texttt{-Ipath\_to\_SLAM/}. It is recommanded to use the working Makefile examples in the SLAM and MCL folder as template.\\
+When writing your own program make sure to properly include all necessary header files and to use the \texttt{SLAM} namespace.
+\begin{lstlisting}
+//Include necessary SLAM files
+#include "grid.h" //Map
+#include "SLAMSolver.h" //Core SLAM class
+#include "tools.h" //Utilities
+#include "rangeFinder.h" //Range finder model
+#include "Models/occupancyGridBresenham.h" //Map model
+#include "Models/odometryModel.h" //Motion model
+#include "Models/likelihoodField.h" //Measurement model
+
+//namespace
+using namespace SLAM;
+\end{lstlisting}
+Again, it is recommanded to use the existing examples in the SLAM and MCL folder as template.
+\section{Examples}
+Complete examples with existing data can be found in the SLAM and MCL folder. Both examples provide a complete workflow from reading data from files to storing and visualizing the results. Furthermore, expected results are included to manually check the correct working of \SLAM. Extensive comments are available in both examples.
+
+\end{document}

@@ -1,0 +1,94 @@
+Installing and running FANN (http://leenissen.dk/fann/wp/)
+
+1) download FANN > http://leenissen.dk/fann/wp/download/
+
+-->After download it will usually be at the Downloads folder
+
+
+2) Go to folder and then run >> cmake .
+
+For example, poma@poma-X9SRA-X9SRA-3:~/Downloads/FANN-2.2.0-Source$ cmake .
+
+
+3) sudo make install
+
+For example, poma@poma-X9SRA-X9SRA-3:~/Downloads/FANN-2.2.0-Source$ sudo make install
+--> This will install in user local, we will see all "fnn" files in usr/local/include
+
+
+
+4) sudo ldconfig
+
+For example, poma@poma-X9SRA-X9SRA-3:~/Downloads/FANN-2.2.0-Source/examples$ sudo ldconfig
+--> This is to solve an error problem
+
+
+
+5) make runtest to test XOR 
+
+For example, /workspace/pmanoonpong-gorobots-fork/examples/artificial_neural_networks/fann_network/examples$ make runtest
+
+
+
+6) Test XOR example:
+
+go to gorobots /workspace/pmanoonpong-gorobots-fork/examples/artificial_neural_networks/fann_network/examples$ 
+
+or 
+
+poma@poma-X9SRA-X9SRA-3:~/Downloads/FANN-2.2.0-Source/examples$ 
+
+--> run make
+For example, /workspace/pmanoonpong-gorobots-fork/examples/artificial_neural_networks/fann_network/examples$ make
+
+--> run train or test
+For example, /workspace/pmanoonpong-gorobots-fork/examples/artificial_neural_networks/fann_network/examples$ ./xor_train 
+
+/workspace/pmanoonpong-gorobots-fork/examples/artificial_neural_networks/fann_network/examples$ ./xor_test
+
+
+See more at http://leenissen.dk/fann/wp/help/getting-started/
+
+Look at the example "xor_train.c"
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+Preparing a text file for training a neural netowrk
+
+1) Prepare the file in the following format
+
+First row = "number of training example" "number of inputs"  "number of output"
+Second row = (set1) input1_at_time0  input2_at_time0  ....
+Third row = (set1) output1_at_time0  output2_at_time0  ....
+Fourth row = (set2) input1_at_time1  input2_at_time1  ....
+Fifth row = (set2) output1_at_time1  output2_at_time1  ....
+
+For example,
+
+4 2 1
+-1 -1
+-1
+-1 1
+1
+1 -1
+1
+1 1
+-1
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+Include FANN into your project
+
+1) add "-lfann" in Makefile.conf
+
+For example, LIBS = -lreadline  -lncurses -lfann
+
+2) add include "floatfann.h" and include "fann.h"
+
+3) call the network
+
+2) fann_type *calc_out;
+fann_type input [60];
+struct fann *ann = fann_create_from_file()
+ 

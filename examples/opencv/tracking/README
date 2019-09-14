@@ -1,0 +1,46 @@
+Adding   color points into a video for tracking
+
+1) Extract images from a video
+
+Using e.g., VLC player
+https://www.youtube.com/watch?v=s4CMYf8iYKc
+https://www.youtube.com/watch?v=geF_i71I-ZM
+
+Tools --> Preferences --> All -->  select *Scene video filter* --> set recording ratio to e.g., 5
+
+OR
+
+Using GIMP
+
+https://www.youtube.com/watch?v=chmuaoHAzDM 
+
+
+2) Add color point into each image using GIMP
+
+3) Combine all images with color points to a video using 
+e.g., VideoMach or Kdenlive
+
+----
+
+Giuliano Di Canio
+giuliano.dicanio@gmail.com
+
+Software for tracking Trajectories from video
+
+You need to use a video with a constant background and a main feature(can be an object, a person walking etc..)
+You also need to have a small colored feature you want to track in the video, for example
+a circle of constant color. 
+
+Right now you can detect up to three trajectories, meaning that you have to have a videoclip with three colored circles
+on the main feature. You need to be sure that the colors that you are tracking don't appear anywhere else in the frame.
+Of course you can also have a videoclip with two colors, one or even any(if you just want to show the video you uploaded).
+
+Trajectories will be shown but you can also save them in a file like (x y) coordinates.
+
+
+
+-----------------TO DO----------------------
+Please open the main.cpp file and go in the SETTING sections, here the comments will help you 
+to set few things in order to have the data you need. 
+
+

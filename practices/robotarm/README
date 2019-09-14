@@ -1,0 +1,9 @@
+amosiisensormotordefinition.h = define name (not important)
+
+Please modify:
+
+amosII.cpp & .h = robot simulation (change from hexapod to a 3DOFs robot arm)
+tripodgait18dof.cpp & .h = implement your  inverse kinematics using a feedforward network
+
+Inputs = X,Y,Z
+Outputs = Joint poisiton1, Joint poisiton2, Joint poisiton3 

@@ -1,0 +1,56 @@
+v1.0
+	-Localization and mapping are working for the toy example given in testMCL.cpp and testMap.cpp
+
+v1.1
+	-Localization and mapping are working for data, obtained from simulations in the LPZRobots framework with the AMOSII
+
+v1.2
+	-Implemented FastSLAM algorithm for occupancy grid maps.
+	 Algorithm is roughly working on simulation data, but position estimate sometimes
+	 has a constant offset with respect to true position
+
+v1.3
+	-Improved Makefile. Now everything is detected/dealt with automatically
+	-Reworked names in project. Many classes/files now have the suffix "2D" to clarify, that they are only valid/usable
+	 in a two dimensional world. This might be important when extending project to 3D.
+	-Added class to access the x-IMU sensor
+	-Added possibility to use KLD sampling for MCL and FastSLAM
+	-Combined MCL and SLAM functionality in one method to reduce unnecessary code (particleFilterNaive and particleFilterKLD). 
+	 To allow easy access, wrapper functions, which call the the particleFilter methods, are available (MCL_step and fastSLAMStep)
+
+v1.4
+	-Complete interface to the xIMU sensor. Gyroscope and acceleration data are now used to estimate the orientation of
+	 the xIMU (via Complementary Filter). Furthermore the current position is estimated via double integration of
+	 acceleration.
+
+v1.5
+	- Complete makeover of structure of the particle filter and the underlying models. Each model (motion model, map model
+	  and measurement model) is represented by an abstract base class. Concrete implementations of models overwrite the 
+	  corresponding base class. Parameters of the model are stored in the class, too. This allows for better and easier exchangeabilty of models. 
+	  The SLAMSolver (former robot.h) expects the underlying base classes and thus, is completely independent of the concrete model implementation.
+	- Complete makeover of the Map class. Map is now able to handle an arbitrary number of dimensions (thanks to Susi). Furthermore arbitrary
+	  data types may be used due to template programming. In addition, maps can be stored and loaded from files.
+	- Framework is now independent of dimension of the state space. Before this update, classes like Point2D, State2D or Map2D
+	  were used to represent the environment of the robot. While this allowed for a better readibility of the code, e.g. 
+	  point.x or state.location.x was used, the extension to state spaces of different dimensions was cumbersome. Now all
+	  classes related to the environment are either replaced by std::vector, e.g. State2D or Point2D, or modified to 
+	  allow for arbitrary dimensions, e.g. Map2D is changed to a multidimensional grid. The user of those classes is responsible for keeping
+	  track of the meaning and the consitency of the different entries, e.g. state[0] is always x coordinate of state space. 
+	  Concrete motion, map or measurement models may expect a concrete dimension, e.g. likelihood fields work only in 2D. This
+	  should be noted through comments in the corresponding header file.
+	- Added config file parser to be able to store parameters for the different models in a .cfg file. Furthermore, affected classes now offer
+	  a constructor, which will read the required parameters from a given .cfg file.
+	  Implementation relies heavily on libconfig++ (http://www.hyperrealm.com/libconfig/). 
+	- Tried to parallelize code with openMP. However, this did not yield any significant improvements, even on an eight core machine. 
+
+v1.6
+	- Angles in inverseSensorModel were computed wrongly. They had to be rewrapped to [-pi,pi]. This is now implemented as a helper function
+	  in tools.h
+	- In inverseSensorModel cells very close to robot might obtain angles (with respect) to robot, that qualify them to be out of range of
+	  the range finder (due to discrete nature of grid). To overcome this problem, the size, that is the maximal radius, of the robot must be
+	  specified in a parameter file. All cells in this sphere are automatically set to free.
+	- Added new occupancy grid mapping, which relies on Bresehenham's line drawing algorithm (http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm)
+	  in occupancyGridBresenham.cpp/.h
+	- All stuff related to random numbers does now only rely on boost/random. The standard c++ srand/rand seemed to be causing invalid results
+	  due to drawing to many random numbers
+	  

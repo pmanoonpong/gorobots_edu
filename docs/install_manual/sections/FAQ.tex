@@ -1,0 +1,359 @@
+\section{FAQs}
+
+\subsection{Installation errors in general}
+
+\subsubsection{Symbol lookup error}
+After installing the "binutils-gold" package, I get the following error after recompiling my source code:
+"./test: symbol lookup error: /usr/local/lib/liburg.so.0: undefined symbol: \_ZTIN3qrk10CoordinateE"
+(Note: liburg is a library for the Hokuyo laser scanners from here or via packet manager).\\
+
+As "binutils-gold" contains a different linker for C++ files, which is optimized for speed, it is likely that this new linker does not link the laser scanner libraries correctly (probably due to "bad" programming within the drivers).
+However, this new linker is not necessary for compiling and running lpzrobots, it just speeds up the compilation time.
+So the solution to the problem is simple: Uninstall "binutils-gold" and everything works.
+
+\subsection{Problem of displaying plots from Guilogger}
+If you cannot display any plots from Guilogger:\\
+\begin{lstlisting}
+You need to install gnuplot-x11
+"sudo apt-get install gnuplot-x11"
+\end{lstlisting}
+
+\subsection{Cannot complie Lpzrobots}
+
+\begin{lstlisting}
+If you cannot complie Lpzrobots, you may check in .bashrc\\
+You should have ``export PATH = /home/YOUR USER NAME/bin:$PATH''
+
+e.g., you should have all these in your .bashrc
+
+# definitions for lpzrobots
+export CPATH=``$HOME/include''
+export LIBRARY_PATH=``$HOME/lib''
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$HOME/lib:/usr/lib/osgPlugins3.0.1
+export PATH=${PATH}:$HOME/bin
+export PATH = /home/poma/bin:$PATH
+
+\end{lstlisting}
+
+
+
+\subsection{Errors using setUpGoRotobots.sh}
+
+\subsubsection{Fail to run setUpGoRotobots.sh}
+\begin{lstlisting}
+
+You might have to change permission ``chmod u+x setUpGoRobots.sh''
+if you cannot execute.
+
+You should also try to update your system.
+>> sudo apt-get update
+
+
+If you fail to clone using the script, you could
+clone directly as below (otherwise, skip this)
+
+>>/workspace$ git clone https://your user name@git.assembla.com/
+your user name-gorobots-fork.git -b master
+
+>>/workspace$ git clone https://your user name@git.assembla.com/
+your user name-lpzrobots-fork.git -b lpzrobots
+
+\end{lstlisting}
+
+\subsubsection{Error with \emph{git clone}}
+
+Whilst cloning the repositories, I encountered the following error:
+\begin{lstlisting}
+git clone https://crauterb@git.assembla.com/lpzrobots.git -b master
+Cloning into crauterb-lpzrobots-fork...
+Password:
+remote: Counting objects: 25478, done.
+remote: Compressing objects: 100% (6030/6030), done.
+remote: Total 25478 (delta 19211), reused 25478 (delta 19211)
+Receiving objects: 100% (25478/25478), 19.97 MiB | 527 KiB/s, done.
+Resolving deltas: 100% (19211/19211), done.
+warning: Remote branch master not found in upstream origin, using HEAD instead
+warning: remote HEAD refers to nonexistent ref, unable to checkout.
+\end{lstlisting}
+
+the repository Lpzrobots when there was no branch \emph{master}, and for some reason, it was not added later and did not appear anywear.
+The solution was simple: Delete the forked version and create a new one - if possible. Worked for me.
+
+\subsection{Problems with GIT}
+
+\subsubsection{Setting up Repositories in Eclipse}
+\label{EclipseGIT}
+In some cases, the instructions on how to set up the GIT-repositories within Eclipse did not work. \\
+Here is a different approach, that worked for me: \\
+\begin{enumerate}
+ \item Import the repositories into the GIT-view of Eclipse, just as described before
+ \item Instead of importing over the GIT-View, you now go onto \emph{File $\rightarrow$ Import $\rightarrow$ General $\rightarrow$ Existing Projects into Workspace} and you then choose the two repositories
+ \item After Eclipse has imported the files, you can \emph{right-click} on the Project, and then select \emph{Team $\rightarrow$ Share}
+ \item Now, just select \emph{GIT} and the two GIT-repository-adresses should appear
+ \item \emph{Apply}
+\end{enumerate}
+
+
+\subsubsection{No Connection to GIT Server: The remote end hung up unexpectedly.}
+
+If you defined stable as usual (check with{\tt git remote -v}):\\
+ \nolinkurl{stable}    \nolinkurl{https://wbj@git.assembla.com/lpzrobots.git (fetch)}\\
+ \nolinkurl{stable}    \nolinkurl{https://wbj@git.assembla.com/lpzrobots.git (push)}\\\\
+%
+but when typing {\tt git fetch origin} you get the following error message: \\
+{\tt Password for 'https://wbj@git.assembla.com':} \\
+{\tt error: RPC failed; result=22, HTTP code = 401} \\
+{\tt fatal: The remote end hung up unexpectedly} \\\\
+%
+and also defining the origin with http only:\\
+\nolinkurl{stable_http}    \nolinkurl{http://wbj@git.assembla.com/lpzrobots.git (fetch)}\\
+does not help, try to use the git protocol:\\
+\nolinkurl{stable_git2}    \nolinkurl{git@git.assembla.com:lpzrobots.git (fetch)}\\
+\nolinkurl{stable_git2}      \nolinkurl{git@git.assembla.com:lpzrobots.git (push)}
+
+\subsection{Compile Errors}
+
+\subsubsection{OpenCV highgui missing}
+You are using gorobots as a library build (``new makefile system'') and you
+are experiencing the following error while trying to compile, you are missing
+the highgui library development files of the opencv package:
+\begin{lstlisting}
+utils/real_robots/sensors/camera/CamTagPositionSensor.h:11:39:
+fatal error: opencv2/highgui/highgui.hpp: No such file or directory
+\end{lstlisting}
+Install the missing package by typing:
+\begin{lstlisting}
+$ sudo apt-get install libopencv-highgui-dev
+\end{lstlisting}
+
+\subsubsection{C++11 unknown}
+If you are trying to compile and obtain errors related to the flag
+\begin{lstlisting}
+ -std=c++11
+\end{lstlisting}
+it means that you finally will have to upgrade your machine as your version of
+gcc does not support the C++11 flag.
+
+\subsubsection{osg::Geometry::BIND\_PER\_PRIMITIVE unknown}
+If your version of Open Scene Graph it too recent, you may observe the following
+error while trying to compile lpzrobots:
+\begin{lstlisting}
+osg/osgprimitive.cpp:668:32: error:
+  'BIND_PER_PRIMITIVE' is not a member of 'osg::Geometry'
+\end{lstlisting}
+One quick fix for this is to just comment out line 668 in osg\/osgprimitive.cpp.
+Updating to a more recent version of lpzrobots would resolve the problem as
+well.
+
+
+\subsubsection{cannot find -ltinyxml2}
+With the recent version of gorobots where unit test is embedded, you might have this problem after ``make'' in gorobots:
+\begin{lstlisting}
+/usr/bin/ld: cannot find -ltinyxml2
+collect2: error: ld returned 1 exit status
+make: *** [libgorobots.so] Error 1
+\end{lstlisting}
+You need to install -ltinyxml2. For installation, you could use synaptics and search for tinyxml2 and then select "libtinyxml2-dev and litinyxml2-0.0.0".
+
+
+\subsection{Errors when starting the simulation}
+
+The error messages was:
+
+\begin{lstlisting}
+> ./start
+> ./start: error while loading shared libraries: libode\_dbl.so.1:
+  cannot open shared object file: No such file or directory
+\end{lstlisting}
+
+\begin{lstlisting}
+Basically when you compile lpz-robot to some local directory.
+The projects cannot start as they cannot locate "libode_dbl.so.1"
+A quick fix involves making a symbolic link (with root priviledge)
+that points to the file in your systems /lib/ library.
+\end{lstlisting}
+
+The solution was:
+\begin{lstlisting}
+ > source ~/.bashrc
+\end{lstlisting}
+
+\begin{lstlisting}
+Another solution was:
+
+"sudo ln -sf home/username/lpzrobots
+/opende/ode/src/.libs/libode_dbl.so.1 /lib/libode_dbl.so.1"
+\end{lstlisting}
+
+
+\begin{lstlisting}
+if you use Ubuntu version 12.4 LTS, you might see this problem:
+
+> ./start
+> ./start: symbol lookup error: /usr/lib/libgsl.so.0: undefined symbol: cblas_dnrm2
+\end{lstlisting}
+The solution was:
+\begin{lstlisting}
+ > sudo apt-get remove binutils-gold
+\end{lstlisting}
+
+
+
+\subsection{Using Lpzrobots}
+\begin{lstlisting}
+> after start simulation , press 1 to fixed camera view
+> Ctrl r = record movie
+> .\start -f = record log file
+> .\start = start program
+> .\start -g 1 = display GUI
+\end{lstlisting}
+
+\subsection{Using EPuck Monitor}
+
+\subsubsection{When trying to run qmake, I obtain ``unknown QT: widgets''}
+EPuck monitor is optimized for Qt5. If you obtain the ``unknown QT: widgets'' warning you are most likely using Qt4 by default on your system. Find out how to enable Qt5 by default on your system. If you are working with Ubuntu 12.04 LTS, the following terminal commands are what you are looking for. They will install Qt5 and enable it as default:
+\begin{lstlisting}
+$ sudo apt-add-repository ppa:ubuntu-sdk-team/ppa
+$ sudo apt-get update
+$ sudo apt-get install qtdeclarative5-dev qt5-default
+\end{lstlisting}
+
+
+\subsection{Serial interface}
+
+\begin{lstlisting}
+
+> sudo usermod -a -G dialout username
+> Then restart your PC
+
+
+\end{lstlisting}
+
+\subsection{Public key to push to assembla}
+
+\begin{lstlisting}
+
+For the first time to push from your PC to assembla, you need to
+
+1) Generate and upload your SSH key
+
+ssh-keygen -t rsa -C "your email"
+
+2) Copy public key (id_rsa.pub) into your Assembla Profile:
+https://www.assembla.com/user/edit/edit_git_settings
+
+Please also check instructions on assembla:
+
+https://www.assembla.com/spaces/dshaikh-gorobots-fork/git/instructions
+
+
+\end{lstlisting}
+
+
+
+\subsection{Setting up LPZ robots and gorobots of Mac (OSX)}
+
+\begin{lstlisting}
+
+1) Download Ubuntu on you Mac (https://www.ubuntu.com/download/desktop)
+,e.g., Ubuntu 16.04.1 LTS
+
+2) Install VirtualBox on you Mac (https://www.virtualbox.org/wiki/Downloads)
+
+3) Install Ubuntu on VirtualBox 
+(http://www.simplehelp.net/2015/06/09/how-to-install-ubuntu-onyour-mac/)
+
+4) Setting up LPZ robots and gorobots on Ubuntu
+(http://manoonpong.com/MOROCO/lpz_guide.txt)
+
+(On Ubuntu)
+
+5) Go to USB settings > Ports > USB > Adds new USB filter > Select your USB port > Ok
+
+6) Run the program
+
+To control a robot via serial interface, if you cannot run the program
+because of serial port terminal problems(cannot open /dev/ttyUSB0), please try this:
+
+1) Adding yourself to the dialout group, run the command below.
+$ sudo adducer <your user> dialout
+$ sudo reboot
+
+2) Open the terminal and run the program again.
+
+You should now have a window with the hexapod simulation running.
+
+
+\end{lstlisting}
+
+
+\subsection{Setting up LPZ robots and running it on the SDU super Computer Abacus}
+
+\begin{lstlisting}
+
+##After dependencies are installed change 
+the ode_robots-config.m4 file to point to /home/<user>/lib64 instead of using -lm
+
+xutils-dev 
+ftp://rpmfind.net/linux/opensuse/distribution/12.1
+/repo/oss/suse/x86_64/xorg-x11-util-devel-7.6-13.1.2.x86_64.rpm
+rpm2cpio to-install.rpm | cpio -idv
+
+libreadline-dev  
+ftp://ftp.gnu.org/gnu/readline/readline-6.3.tar.gz
+configure --prefix /home/almeh
+make
+make install
+
+libgsl0-dev 
+ftp://ftp.gnu.org/gnu/gsl/gsl-2.3.tar.gz
+configure --prefix /home/almeh
+make
+make install
+
+
+libglu-dev 
+#Should be provided by the mesa below
+
+libgl1-mesa-dev 
+ftp://195.220.108.108/linux/sourceforge/m/ma/magicspecs
+/apt/3.0/x86_64/RPMS.m/mesa-libGL-devel-10.6.3-2.20150729mgc30.x86_64.rpm
+rpm2cpio to-install.rpm | cpio -idv
+
+
+freeglut3-dev  
+cmake -DCMAKE_INSTALL_PREFIX=/home/almir
+make 
+make install
+
+libopenscenegraph-dev 
+
+### CANT USE THIS Missing class GUIEventHandlerVisitor
+
+http://trac.openscenegraph.org/downloads/developer_releases/OpenSceneGraph-3.4.0.zip
+http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-3.0.1
+/source/OpenSceneGraph-3.0.1.zip
+unzip
+cmake -DCMAKE_INSTALL_PREFIX=/home/almir
+make
+make install
+
+libqt4-develop /// SUSE version
+ftp://rpmfind.net/linux/opensuse/update/leap/42.1/oss
+/x86_64/libqt4-devel-4.8.6-13.1.x86_64.rpm
+
+
+libqt4-qt3support 
+ftp://195.220.108.108/linux/opensuse/update
+/leap/42.1/oss/x86_64/libqt4-qt3support-4.8.6-13.1.x86_64.rpm
+
+## Did not install below ##
+libqt4-dev 
+libqt4-opengl 
+libqt4-opengl-dev 
+gnuplot 
+gnuplot-x11 
+libncurses5-dev
+
+\end{lstlisting}
+

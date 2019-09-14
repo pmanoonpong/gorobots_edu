@@ -1,0 +1,54 @@
+ \begin{tikzpicture}{Simulation}
+  \small
+  \node at (0,4) (mainE) [rectangle,draw] {\emph{Simulated Environment}: main.cpp};
+  \node at (0,6) (amos) [rectangle,draw] {\emph{Simulated Robot}: amonsII.cpp$\backslash$h};
+
+  \node at (0,2) (mainR) [rectangle,draw] {\emph{Real Environment}: main.cpp};
+  \node at (0,0) (real) [rectangle,draw] {\emph{Real Robot}: AMOSII\_serial.cpp$\backslash$h};
+
+  \node at (6,5) (amosC) [rectangle,draw] {amosIIcontrol.cpp$\backslash$h};
+  \node at (8.5,3.25) (NP) [rectangle,draw] {NeuralProcessing.ccp$\backslash$h};
+  \node at (8.5,2.5) (NL) [rectangle,draw] {NeuralLocomotion.cpp$\backslash$h};
+  \node at (9,1.5) (CPG) [] {CPG().cpp$\backslash$h};
+  \node at (9,1) (PCPG) [] {POSTCPG().cpp$\backslash$h};
+  \node at (9,0.5) (PSN) [] {PSN().cpp$\backslash$h};
+  \node at (9,0) (VRN) [] {VRN().cpp$\backslash$h};
+  \path[->]
+	      %(mainE) edge (amos)
+	      (mainE) edge (amosC)
+	      (mainR) edge (amosC)
+	      (mainR) edge (real)
+	      (6,2.5) edge (NL)
+	      (6,3.25) edge (NP)
+	      (7,0) edge (VRN)
+	      (7,0.5) edge (PSN)
+	      (7,1) edge (PCPG)
+	      (7,1.5) edge (CPG)
+	      (mainE) edge (amos)
+	      ;
+  \path[-]
+	      (amosC) edge (6,2.5)
+	      (7,2.25) edge (7,0)
+	      ;
+
+
+\draw[dashed,color=blue] (-3, 3.5) to (3, 3.5);
+\draw[dashed,color=blue] (3, 3.5) to (3, 6.5);
+\draw[dashed,color=blue] (3, 6.5) to (-3, 6.5);
+\draw[dashed,color=blue] (-3,6.5) to (-3, 3.5);
+
+\draw[dashed,color=red] (-3, -0.5) to (3, -0.5);
+\draw[dashed,color=red] (3, -0.5) to (3, 2.5);
+\draw[dashed,color=red] (3, 2.5) to (-3, 2.5);
+\draw[dashed,color=red] (-3,2.5) to (-3, -0.5);
+
+\draw[dashed,color=mygreen] (4, -0.5) to (11, -0.5);
+\draw[dashed,color=mygreen] (11, -0.5) to (11, 6.5);
+\draw[dashed,color=mygreen] (11, 6.5) to (4, 6.5);
+\draw[dashed,color=mygreen] (4,6.5) to (4, -0.5);
+	      
+
+\node at (1.75,1) (sim) [] {\emph{Reality}};
+\node at (1.75,5) (reall) [] {\emph{Simulation}};
+\node at (7.75,6) (reall) [] {\emph{Control}};
+ \end{tikzpicture}

@@ -1,0 +1,85 @@
+\section{ROS installation}
+
+\subsection{Step by step}
+
+\begin{lstlisting}
+
+ROS is required if you want to read the EEG signal from single dry electrode 
+(see Stoya' master thesis, SDU) to the Lpzrobots
+For example, see >> projects>> amosi>> eeg_based_control
+
+Step1: check http://wiki.ros.org/indigo/Installation/Ubuntu 
+
+Step2: Configure your Ubuntu repositories
+Configure your Ubuntu repositories to allow "restricted," "universe," and "multiverse." 
+You can follow the Ubuntu guide for instructions on doing this.
+(see, https://help.ubuntu.com/community/Repositories/Ubuntu) 
+
+Step3: sudo sh -c 'echo "deb http://packages.ros.org/ros/
+ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+
+Step4: wget https://raw.githubusercontent.com/ros/
+rosdistro/master/ros.key -O - | sudo apt-key add -
+
+
+Step5: sudo apt-get update
+
+Step6: sudo apt-get install ros-indigo-desktop-full
+
+Step7: sudo rosdep init
+
+Step8: rosdep update
+
+Step9: echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
+
+Step10: source ~/.bashrc
+
+
+Step11: sudo apt-get install python-rosinstall
+
+
+>> Start ROS by type > roscore
+
+
+>> Adding ROS into Lpzrobots
+see MakeFile.conf in >> projects>> amosi>> eeg_based_control>>sim
+
+pkg-config --cflags roscpp
+
+>> Then add this into your makeFile.conf
+
+-I/opt/ros/indigo/include
+
+
+
+#ROS > Run: pkg-config --cflags roscpp
+
+# This will give you the INC path, e.g., -I/opt/ros/indigo/include
+see projects>amosi>eeg_based_control>filtering_classification> MakeFile.conf
+
+Add this in the MakeFile.conf
+see MakeFile.conf in >> projects>> amosi>> eeg_based_control>>sim
+see MakeFile.conf in >> projects>>amosi>>eeg_based_control>>filtering_classification
+
+INC += -I/opt/ros/indigo/include 
+
+#ROS > Run: pkg-config --libs roscpp
+# This will give you the LIBS path
+Add this in the MakeFile.conf, 
+see MakeFile.conf in >> projects>> amosi>> eeg_based_control>>sim
+see MakeFile.conf in >> projects>>amosi>>eeg_based_control>>filtering_classification
+
+LIBS  += -L/opt/ros/indigo/lib -lroscpp -lpthread 
+-l:/usr/lib/x86_64-linux-gnu/libboost_signals.so -l:
+/usr/lib/x86_64-linux-gnu/libboost_filesystem.so 
+-lrosconsole -lrosconsole_log4cxx 
+-lrosconsole_backend_interface -l:/usr/lib/liblog4cxx.so 
+-l:/usr/lib/x86_64-linux-gnu/libboost_regex.so 
+-lxmlrpcpp -lroscpp_serialization -lrostime 
+-l:/usr/lib/x86_64-linux-gnu/libboost_date_time.so -lcpp_common 
+-l:/usr/lib/x86_64-linux-gnu/libboost_system.so 
+-l:/usr/lib/x86_64-linux-gnu/libboost_thread.so 
+-l:/usr/lib/x86_64-linux-gnu/libpthread.so 
+-l:/usr/lib/x86_64-linux-gnu/libconsole_bridge.so  
+
+\end{lstlisting}

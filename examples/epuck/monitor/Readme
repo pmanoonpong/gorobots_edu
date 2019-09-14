@@ -1,0 +1,4 @@
+To run the program:
+1) qmake
+2) make
+3) ./Epuckmonitor

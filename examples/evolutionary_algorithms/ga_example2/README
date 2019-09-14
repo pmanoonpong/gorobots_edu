@@ -1,0 +1,32 @@
+
+SIMPLE_GA is a C++ program which implements a simple genetic algorithm, by Dennis Cormier and Sita Raghavan.
+
+Here, we consider the task of constrained optimization of a scalar function. That is, we have a function F(X), where X is an M-vector satisfying simple constraints for each component I:
+
+        X_MIN[I] <= X[I] <= X_MAX[I]
+      
+and, subject to those constraints, we seek a vector X which maximizes the value F(X).
+In the example given here, the spatial dimension M is 3, the function F(X) is X[1]^2 - X[1]*X[2] + X[3], and the constraints are
+
+        0 <= X[1] <= 5
+        0 <= X[2] <= 5
+       -2 <= X[3] <= 2
+      
+The correct solution is [5,0,2].
+
+
+MAIN supervises the genetic algorithm.
+CROSSOVER selects two parents for the single point crossover.
+ELITIST stores the best member of the previous generation.
+EVALUATE implements the user-defined valuation function
+I4_UNIFORM_AB returns a scaled pseudorandom I4 between A and B.
+INITIALIZE initializes the genes within the variables bounds.
+KEEP_THE_BEST keeps track of the best member of the population.
+MUTATE performs a random uniform mutation.
+R8_UNIFORM_AB returns a scaled pseudorandom R8.
+REPORT reports progress of the simulation.
+SELECTOR is the selection function.
+TIMESTAMP prints the current YMDHMS date as a time stamp.
+XOVER performs crossover of the two selected parents.
+
+see https://people.sc.fsu.edu/~jburkardt/cpp_src/simple_ga/simple_ga.html

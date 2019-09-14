@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Monitor</class>
+ <widget class="QMainWindow" name="Monitor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>872</width>
+    <height>680</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Monitor</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout_4">
+    <item row="0" column="0">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>Settings</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Port</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_Port">
+           <property name="text">
+            <string>/dev/rfcomm0</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QCheckBox" name="checkBox_Sensors">
+           <property name="text">
+            <string>Sensors</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_Micros">
+           <property name="text">
+            <string>Micros</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_Cam">
+           <property name="text">
+            <string>Cam</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Height</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_Height">
+           <property name="text">
+            <string>20</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Width</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_Width">
+           <property name="text">
+            <string>20</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="3" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QPushButton" name="pushButton_Connect">
+           <property name="text">
+            <string>Connect</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_Disconnect">
+           <property name="text">
+            <string>Disconnect</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="1" rowspan="2">
+     <widget class="QGroupBox" name="groupBox_7">
+      <property name="minimumSize">
+       <size>
+        <width>180</width>
+        <height>380</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>180</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="title">
+       <string>Motors</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="checkBox_Led0">
+         <property name="text">
+          <string>Led 0</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="checkBox_Led1">
+         <property name="text">
+          <string>Led 1</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="checkBox_Led2">
+         <property name="text">
+          <string>Led 2</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QCheckBox" name="checkBox_Led3">
+         <property name="text">
+          <string>Led 3</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QCheckBox" name="checkBox_Led4">
+         <property name="text">
+          <string>Led 4</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QCheckBox" name="checkBox_Led5">
+         <property name="text">
+          <string>Led 5</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QCheckBox" name="checkBox_Led6">
+         <property name="text">
+          <string>Led 6</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QCheckBox" name="checkBox_Led7">
+         <property name="text">
+          <string>Led 7</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QCheckBox" name="checkBox_Led_front">
+         <property name="text">
+          <string>Led Front</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QCheckBox" name="checkBox_Led_body">
+         <property name="text">
+          <string>Led Body</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0">
+        <widget class="QLineEdit" name="lineEdit_MotorLeft">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>23</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="0">
+        <widget class="QLineEdit" name="lineEdit_MotorRight">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>23</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="1">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Motor Left</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="1">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Motor Right</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <widget class="QCheckBox" name="checkBox_Sound2">
+         <property name="text">
+          <string>Sound 2</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="QCheckBox" name="checkBox_Sound1">
+         <property name="text">
+          <string>Sound 1</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="2" rowspan="2">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="PlotWidget" name="plotWidget" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>400</width>
+          <height>300</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>400</width>
+          <height>300</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QScrollArea" name="scrollCamera">
+        <property name="minimumSize">
+         <size>
+          <width>400</width>
+          <height>300</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>400</width>
+          <height>300</height>
+         </size>
+        </property>
+        <property name="verticalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="scrollAreaWidgetContents">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>400</width>
+           <height>300</height>
+          </rect>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>400</width>
+           <height>300</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>400</width>
+           <height>300</height>
+          </size>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="QLabel" name="label_ConnectionSpeed">
+          <property name="text">
+           <string>Connection Speed [Hz] </string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit_ConnectionSpeed"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="0">
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="1" column="0">
+       <widget class="QGroupBox" name="groupBox_5">
+        <property name="maximumSize">
+         <size>
+          <width>140</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>Accerolometer</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_7">
+         <item>
+          <widget class="QLineEdit" name="lineEdit_Accx"/>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_Accy"/>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_Accz"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QGroupBox" name="groupBox_4">
+        <property name="maximumSize">
+         <size>
+          <width>140</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>Ambient Light</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_6">
+         <item>
+          <widget class="QProgressBar" name="progressBar_AL0">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar_AL1">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar_AL2">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar_AL3">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar_AL4">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar_AL5">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar_AL6">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar_AL7">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QGroupBox" name="groupBox_3">
+        <property name="maximumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>Ground</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QProgressBar" name="progressBar_Ground0">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar_Ground1">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar_Ground2">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>Prox</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="3" column="0">
+          <widget class="QProgressBar" name="progressBar_IR1">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QProgressBar" name="progressBar_IR0">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="0">
+          <widget class="QProgressBar" name="progressBar_IR4">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QProgressBar" name="progressBar_IR3">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item row="12" column="0">
+          <widget class="QProgressBar" name="progressBar_IR6">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item row="14" column="0">
+          <widget class="QProgressBar" name="progressBar_IR7">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QProgressBar" name="progressBar_IR2">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="0">
+          <widget class="QProgressBar" name="progressBar_IR5">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QGroupBox" name="groupBox_6">
+        <property name="title">
+         <string>Ground</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QProgressBar" name="progressBar_GROUND0">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar_GROUND1">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar_GROUND2">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QWidget</extends>
+   <header>plotwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

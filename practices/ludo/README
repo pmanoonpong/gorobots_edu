@@ -1,0 +1,29 @@
+AI2 - Tools of Artificial Intelligence
+====
+University of Southern Denmark
+
+LUDO GUI
+========
+1) go to /practices/ludo/
+
+2) mkdir -p build
+
+3) cd build
+
+4) qmake ../ludo/
+
+5) make
+
+6) ./ludo
+
+-------------
+1) /practices/ludo/ludo-gui/build$ qmake ../ludo/
+2) /practices/ludo/ludo-gui/build$ make
+3) /practices/ludo/ludo-gui/build$ ./start 
+
+
+
+Implement your own controller in 
+
+ludo_player_random.cpp  --> by defualt, it control blue (p3) & red (p4) 
+ludo_player.cpp -->  by defualt, it control green (p1) & yellow (p2) 

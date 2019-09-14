@@ -1,0 +1,51 @@
+\section{Introduction}
+
+The LpzRobots-Simulation is a robot simulation programmed at the university of Leipzig. Its main features
+include the \emph{ode\_robots}, which is a 3D robot simulator, that is physically correct, and the so called
+\emph{selforg}, that is a framework for controller implementation. \\
+The important parts of the software architecture are shown in Figure: \ref{architecture}: \\
+\begin{center}
+\begin{figure}[h!]
+ \begin{tikzpicture}
+  \node at (0,2) (1) [rectangle,draw] {ThisSim};
+  \node at (2,1) (2) [rectangle,draw] {Agent};
+  \node at (2,3) (3) [rectangle,draw] {Simulation};
+  \node at (7,0) (4) [rectangle,draw] {AbstractRobot};
+  \node at (7,2) (5) [rectangle,draw] {AbstractController};
+  \node at (7,4) (6) [rectangle,draw] {AbstractWiring};
+  \path[->]
+	      (3) edge (2)
+	      (1) edge (3)
+	      (2) edge (4)
+	      (2) edge (5)
+	      (2) edge (6)
+	      ;
+ \end{tikzpicture}
+ \caption{Software Architecture for LpzRobots and GoRobotos}
+ \label{architecture}
+\end{figure}
+\end{center}
+\emph{ThisSim} will, during a simulation, integrate all elements of this very simulation, which means controlling
+the environment, the robot, as well as setting initial parameters and plotting or logging data. \\
+\emph{Agent} will integrate all elements of an agent by using the shown classes, one can for example add sensory preprocessing
+using a child class of \emph{AbstractWiring}. \newline
+\begin{center}
+  \begin{figure}[h!]
+    \input{sections/Figure1}
+\caption{Need name for this picture}
+  \end{figure}
+
+
+\end{center}
+\newpage
+For working with the LpzRobots-Simulation, you will need a couple of things:
+\begin{enumerate}
+ \item A (preferably up-to-date) UNIX-based Operating System (state of the art: Ubuntu 11.10 or Debian 6.0)
+ \item The Eclipse-Software combined with the following packages:
+      \begin{itemize}
+       \item C/C++ SDK
+       \item The EGit-Tool-Kit
+      \end{itemize}
+ \item Access to the Assembla-Repository (contact your supervisor for access)
+ \item The setUpGoRobots.zip file (contact your supervisor for the file)
+\end{enumerate}

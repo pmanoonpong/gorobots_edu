@@ -1,0 +1,190 @@
+
+\section{Additional (real) Hardware: Camera and Laserscanner}
+
+\subsection{Step by step to install: Camera, LpzRobots and Eclipse, Laser scanner}
+1) Linux: Install \emph{Linux} e.g., Ubuntu 12.04\\
+2) Camera: Install \emph{OpenCV} and \emph{AprilTag} for Camera (see How to Use Camera.pdf) OR follow the steps below
+\begin{enumerate}
+\item Use Synaptic Package Manager to install (OpenCV): libopencv-dev
+\item Install necessary packages of AprilTag:
+
+\begin{lstlisting}
+
+See http://april.eecs.umich.edu/wiki/index.php/Download_and_Installation
+
+OR
+
+sudo apt-get install emacs git-core ant subversion gtk-doc-tools
+libglib2.0-dev libusb-1.0-0-dev gv libncurses-dev openjdk-6-jdk
+autopoint libgl1-mesa-dev
+
+\end{lstlisting}
+
+\item Install LCM of AprilTag:
+
+\begin{lstlisting}
+cd $HOME
+svn checkout http://lcm.googlecode.com/svn/trunk lcm
+cd lcm
+./bootstrap.sh
+./configure
+make
+sudo make install
+\end{lstlisting}
+
+\item Install libdc1394of AprilTag:
+
+\begin{lstlisting}
+cd $HOME
+svn co https://libdc1394.svn.sourceforge.net/svnroot/libdc1394/trunk/libdc1394/
+cd libdc1394
+autoreconf -i -s
+./configure
+make
+sudo make install
+
+OR
+
+Note that I met with a problem when I install libdc1394.
+So, another way to do this is:
+At terminal: aptitude search libdc1394
+then you can see several files there.
+Choose libdc1394-22 and libdc1394-22-dev to install, like:
+sudo aptitude install libdc1394-22
+sudo aptitude install libdc1394-22-dev
+\end{lstlisting}
+
+\item Set up environment variables of AprilTag by adding the following lines to .bashrc
+\begin{lstlisting}
+export CLASSPATH=$CLASSPATH:/usr/share/java/gluegen-rt.jar:/usr/
+local/share/java/lcm.jar:$HOME/april/java/april.jar:./
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/april/lib
+alias java='java -ea -server'
+\end{lstlisting}
+
+\item Then reload your bash settings (you won't need to do this the next time you log in):
+\begin{lstlisting}
+source ~/.bashrc
+\end{lstlisting}
+
+\item Install April Toolkit:
+\begin{lstlisting}
+cd $HOME
+git clone git://april.eecs.umich.edu/home/git/april.git
+cd april/java
+ant
+\end{lstlisting}
+
+\item Test AprilTag $->$ You can test the 3D visualization environment with:
+\begin{lstlisting}
+java april.vis.VisTest
+
+Or try out the camera acquisition software with:
+
+java april.jcam.JCamView
+
+Or try to run camera test program at:
+\camera\ToSteffen
+Make sure that "cvCaptureFromCAM(-1) or cvCaptureFromCAM(0)"
+in test_client.cpp
+
+Terminal 1:
+java j_server_test
+
+Terminal 2:
+make clean
+make
+./test_client
+\end{lstlisting}
+
+\end{enumerate}
+
+3) \emph{Lpzrobots and Eclipse} (see Setting up Eclipse and LpzRobots section)
+\begin{lstlisting}
+If you want to use Laser scanner then make sure that in
+./setUpGoRobots.sh
+
+These ones are not installed:
+#echo "sudo apt-get install binutils-gold"
+#sudo apt-get install binutils-gold
+
+>After finish this:
+>Start: Eclipses>>Select: Help>Install Software
+
+1. Work with: http://download.eclipse.org/tools/cdt/releases/indigo
+Select: C/C++ Development Tools
+
+2. Work with: http://download.eclipse.org/egit/updates
+Select: Eclipse EGIT
+
+
+Due to Ubuntu 12.04, you need to type sudo make all
+then you might get the error messages:
+
+make[2]: Leaving directory `/home/poramate/workspace/pmanoonpong-lpzrobots-fork'
+sudo make install_ode_robots
+[sudo] password for poramate:
+
+
+> ./start
+> ./start: error while loading shared libraries: libode\_dbl.so.1:
+  cannot open shared object file: No such file or directory
+
+The solution was:
+When installing Lpzrobots make sure that you install it in
+/home/yourlogin, e.g., /home/poramate
+
+If you made this mistake, you could change this by:
+From terminal, go to your lpzrobots,
+e.g. poramate@ubuntu:~/workspace/pmanoonpong-lpzrobots-fork$
+
+make clean
+make clean-all
+make conf
+
+Then: set new installing path: /home/yourlogin, e.g., /home/poramate
+
+make all
+
+\end{lstlisting}
+
+4) \emph{Laser scanner}
+
+\begin{lstlisting}
+utilities/urg
+1) sudo apt-get install libsdl-net1.2
+2) sudo apt-get install libsdl-net1.2-dev
+3) sudo apt-get install libsdl1.2-dev
+
+4) sudo sh configure
+5) sudo make
+6) sudo make install
+
+poramate@ubuntu:~/Documents/utilities/urg
+
+
+Go to example:
+
+poramate@ubuntu:~/Documents/utilities/urg/samples/cpp
+
+
+Running program:
+
+UrgDevice::connect: /dev/ttyACM0: No such file or directory
+poramate@ubuntu:~/Documents/utilities/urg/samples/cpp: sudo ./mdScan
+UrgDevice::connect: /dev/ttyACM0: No such file or directory
+poramate@ubuntu:~/Documents/utilities/urg/samples/cpp:
+
+\end{lstlisting}
+
+\subsection{Starting Laser scanner demo with simulated and real robots}
+\begin{lstlisting}
+1) Check out "preview_laserscanner"  branch from Lpzrobots repository
+2) in the Lpzrobot directory: e.g., ~/worskspace/ yourname-lpzrobots-forks: make conf , 
+select option = 1 for using laserscanner, 
+select option = 0 for not using laserscanner,
+3) then make all
+4) go to ~/worskspace/ yourname-lpzrobots-forks/oderobots/
+simulations/template_laserscanner
+5) type make and then ./start
+\end{lstlisting}

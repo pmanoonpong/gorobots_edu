@@ -1,0 +1,64 @@
+To use the RC network for input-output mapping
+
+1) Prepare your data into two files: input file and target file and put them into the resources folder
+
+For example, in the resources folder, 
+
+there are:
+the input file--> "InputData_4000_noise.txt.txt" under the folder: resources/cpg_footsensor_data
+the target or desired output file--> "TargetData_4000.txt" under the folder: resources/cpg_footsensor_data
+
+The input file contains --> one input
+
+///////
+If input file contains more than one inputs, e.g., 3 inputs, you have to arrange the file as:
+
+Column1 = Input1 ! Column2 = Input2 ! Column3 = Input3
+///////
+
+
+The target file contains --> one output
+
+Column1 = output of the network
+
+Note that the first part of the data will be used to train and the remaining part will be used to test the trained model!
+
+
+2) Open 'main.cpp' in the src folder
+  
+-Set the path to the input and target files
+
+      //Foot sensor data
+    	string inputPath                    = "resources/cpg_footsensor_data/InputData_4000_noise.txt"; //percentage_1 = 90.0
+    	string targetPath                   = "resources/cpg_footsensor_data/TargetData_4000.txt";//
+
+
+
+-Set number of input, output, and hidden neurons
+ 
+        unsigned int numberOfInputs         = 1;
+        unsigned int numberOfOutputs        = 1;
+        unsigned int numberOfHiddenUnits    = 70;
+       
+ 
+ 
+-Set learning parameters 
+
+        double inputSparsity                = 20.0;
+        double internalSparsity             = 50.0;
+        double learningRate                 = 0.99;
+        
+        
+      
+-Sat how many data points you want to use for training  
+
+For example,    
+      
+double percentage_1                 = 80.0; //  80% of total data for "training" (save)
+
+This means that 80 % of total data points will be used to train the RC network and the remaining data points 20% will be used to test the network
+
+
+3) All weights after learning will be saved in the save_files folder
+
+4) The output data of the network, Target data, and error data will be saved in the results folder
