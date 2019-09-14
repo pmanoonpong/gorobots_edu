@@ -1,0 +1,14 @@
+
+branch: goettingen_master
+- this is the branch from which you should should branch of your first branch and
+- the one to which you should merge your final results after talking to your supervisor 
+
+
+Goettingen Robotics Repository
+
+- controller for simulated/real robots belong in the controller directory 
+  * add/push into corresponding subfolder (e.g. amosII directory for controller of the amosII robot)
+
+- place project related files in the projects folder
+  * usually this is the main.cpp of your simulation or 
+  * temporary files, which you need to show the development you did, but which are not final in the sense that zou will not put them in the controller or the lpzrobots directory

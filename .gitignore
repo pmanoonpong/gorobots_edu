@@ -1,0 +1,17 @@
+.project
+.cproject
+.history
+Makefile
+Makefile.depend
+start
+doxygen.warn
+.settings
+log.settings
+video0*
+*.a
+*.o
+*.so
+*.lo
+*.la
+*~
+*#
