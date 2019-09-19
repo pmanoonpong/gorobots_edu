@@ -1,0 +1,10 @@
+#! /bin/sh
+path_1=$(cd `dirname $0`;pwd)
+link_node="/link_node_file.sh"
+echo $path_1
+echo "${path_1}${link_node}"
+. ${path_1}/../controllers/catkin_ws/devel/setup.sh
+. ${path_1}${link_node}
+
+roslaunch lilibot_controller lilibot_controller.launch
+

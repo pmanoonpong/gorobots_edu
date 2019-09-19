@@ -1,0 +1,22 @@
+<launch>
+
+    <machine name="st-pc"  address="st-pc" env-loader="/home/suntao/workspace/gorobots/projects/stbot/genesis/catkin_ws/src/stbot/config/stbot_env.zsh" user="suntao" />
+    <machine name="nuc"  address="nuc" env-loader="/home/sun/workspace/gorobots/utils/real_robots/stbot/catkin_ws/src/lilistbot/config/lilistbot_env.zsh" user="sun" />
+    
+    <rosparam file="$(find lilibot)/config/lilibot.yaml" command="load"/>
+    <include file="$(find stbot)/launch/stbot.launch" />
+
+
+
+    <arg name="hostname" default="$(env ROS_HOSTNAME)"/>
+
+
+
+
+
+    <node machine="$(arg hostname)" name="robot_node" pkg="lilibot" type="lilibot_node" output="screen" required="true"
+    
+    
+    />
+          
+</launch>

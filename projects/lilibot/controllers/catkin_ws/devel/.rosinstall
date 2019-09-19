@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/suntao/workspace/stbot/lilibot/controllers/catkin_ws/devel/setup.sh
