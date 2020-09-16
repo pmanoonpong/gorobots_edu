@@ -1,0 +1,8 @@
+prefix=/home/suntao/workspace/stbot/lilibot/controllers/catkin_ws/devel
+
+Name: lilibot_controller
+Description: Description of lilibot_controller
+Version: 0.0.0
+Cflags: -I/home/suntao/workspace/stbot/lilibot/controllers/catkin_ws/src/lilibot_controller/include
+Libs: -L/home/suntao/workspace/stbot/lilibot/controllers/catkin_ws/devel/lib -llilibot_controller
+Requires: control_msgs roscpp rospy sensor_msgs std_msgs

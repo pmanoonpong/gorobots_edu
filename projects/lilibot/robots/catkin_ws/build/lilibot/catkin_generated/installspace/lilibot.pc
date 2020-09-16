@@ -1,0 +1,8 @@
+prefix=/home/suntao/workspace/stbot/lilibot/robots/catkin_ws/install
+
+Name: lilibot
+Description: Description of lilibot
+Version: 0.0.0
+Cflags: -I/home/suntao/workspace/stbot/lilibot/robots/catkin_ws/install/include
+Libs: -L/home/suntao/workspace/stbot/lilibot/robots/catkin_ws/install/lib -llilibot
+Requires: roscpp rospy std_msgs dynamixel_workbench_msgs dynamixel_workbench_toolbox
