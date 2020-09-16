@@ -1,0 +1,38 @@
+ _______  ___      _______  ___      _______  __   __ 
+|       ||   |    |   _   ||   |    |       ||  |_|  |
+|  _____||   |    |  |_|  ||   |    |   _   ||       |
+| |_____ |   |    |       ||   |    |  | |  ||       |
+|_____  ||   |___ |       ||   |___ |  |_|  ||       |
+ _____| ||       ||   _   ||       ||       || ||_|| |
+|_______||_______||__| |__||_______||_______||_|   |_|
+                               
+                               
+(tested on ubuntu 18.04 LTS, with ROS Melodic and CoppeliaSim_Edu_V4_0_0_Ubuntu18_04)
+
+1.  open the roscore and vrep simulation
+    $cd ../Projects
+    $chmod a+x start.sh
+    $./start.sh
+
+
+3. Open a new terminal (or tab) and run:
+   $ cd {path_to_framework}/Slalom/projects/catkin_ws/
+   $ catkin_make
+
+4. Open a new terminal (or tab) and run:
+   $ cd {path_to_framework}/Slalom/projects/catkin_ws/
+   $ source ./devel/setup.bash
+   $ rosrun keyboard keyboard
+
+   This node is for running kryboard control mode which can config in main_gecko_controller.cpp
+   Where, manual control by keyboard (MANUAL 1) or autonomous mode (MANUAL 0)
+
+   #define MANUAL 1
+
+   And keyboard conmand is following:
+   a = left
+   d = right
+   w = forward
+   s = backward 
+            
+ 
