@@ -8,12 +8,25 @@
 #include <assert.h>
 #include <cmath>
 #include <stdlib.h>
+#include <stdio.h>
+
+///////// Save text////////////////////////
+#include <iostream>
+#include <fstream>
 #include <string.h>
+using namespace std;
+///////////////////////////////////////////
+
 
 #include <selforg/matrix.h>
 
+
+#define pi 3.14159265
+#define CPG
+
+
 /** To run simulation
-* 0) open ternimal and go to your simulation folder "/workspace/gorobots_edu/practices/amosii"
+* 0) open ternimal and go to your simulation folder "/workspace/gorobots/practices/amosii"
   1) make clean
   2) make 
   3) ./start -g 1 
@@ -52,6 +65,7 @@
 
 
 
+
 /**
  * Empty robot controller.
  * The controller gets a number of input sensor values each timestep
@@ -66,15 +80,56 @@ class EmptyController : public AbstractController {
     EmptyController()
     : AbstractController("EmptyController", "$Id: tripodgait18dof.cpp,v 0.1 $"){
       t = 0;
+      
 
-      outputH1 = 0.001;
-      outputH2 = 0.001;
+      //1) Initial parameters 
+      
+       // STUDENT Modify here //
+      /// Neural Control I: CPG implementation, for students ///
+      outputH1 = 0.0;
+      outputH2 = 0.0;
+      activityH1 = 0.0;
+      activityH2 = 0.0;
+
+       // STUDENT Modify here //
+      //  Connections from CPG to motor neurons
+      bias_tjoint = 0.0;
+      bias_cjoint = 0.0;
+      bias_fjoint = 0.0;
+
+      WeightM0_H2 = 0.0;
+      WeightM1_H2 = 0.0;
+      WeightM2_H2 = 0.0;
+
+      WeightM3_H2 = 0.0;
+      WeightM4_H2 = 0.0;
+      WeightM5_H2 = 0.0;
+
+      WeightM6_H1 = 0.0;
+      WeightM7_H1 = 0.0;
+      WeightM8_H1 = 0.0;
+
+      WeightM9_H1 = 0.0;
+      WeightM10_H1 = 0.0;
+      WeightM11_H1 = 0.0;
+
+      WeightM12_H1 = 0.0;
+      WeightM13_H1 = 0.0;
+      WeightM14_H1 = 0.0;
+
+      WeightM15_H1 = 0.0;
+      WeightM16_H1 = 0.0;
+      WeightM17_H1 = 0.0;
+
+      saveFile1.open("savedata1.txt",ios::out);
+      saveFile2.open("savedata2.txt",ios::out);
+
 
       // plot parameters using GUI "To display GUI, in terminal, type ./start -g 1 "
-      addInspectableValue("outputH1", &outputH1,"outputH1");
-      addInspectableValue("outputH2", &outputH2,"outputH2");
+      addInspectableValue("CPGoutputH1", &outputH1,"CPGoutputH1");
+      addInspectableValue("CPGoutputH2", &outputH2,"CPGoutputH2");
 
-    };
+     };
 
 
 
@@ -112,7 +167,7 @@ class EmptyController : public AbstractController {
     virtual void stepNoLearning(const sensor* x_, int number_sensors,
         motor* y_, int number_motors){
       //Tripodgait for 18 DOF Hexapod
-
+      int static iii=0;
       assert(number_sensors >= 18);
       assert(number_motors >= 18);
 
@@ -122,46 +177,95 @@ class EmptyController : public AbstractController {
       // x_[G0x_s] , x_[G0y_s], x_[G0z_s] = relative position to reference object 1 (red ball)
 
       // Final outputs of your controller should be set to the following y_[xx] parameters to control leg joints
-      //-----------------------------------------------------------------------------------------------//
 
 
-      // generate motor commands
 
-      // right rear coxa (knee) forward-backward joint (back is positive)
-      y_[TR2_m] = 0; // TC  joint (forward-backward movements), e.g., y_[TR2_m] = 1 (move forward), -1 (move backward)
-      y_[CR2_m] = 0; // CTr joint (up-down movements), e.g., y_[CR2_m] = 1 (move up), -1 (move down)
-      y_[FR2_m] = 0; // FTi joint (extension-flexion movements), e.g., y_[CR2_m] = 1 (extension), -1 (flexion)
 
-      //left rear
-      y_[TL2_m] = 0;
-      y_[CL2_m] = 0;
-      y_[FL2_m] = 0;
 
-      //right middle
-      y_[TR1_m] = 0;
-      y_[CR1_m] = 0;
-      y_[FR1_m] = 0;
+  /*******************************************************************************
+   *  MODULE 1 CPG
+   *******************************************************************************/
+      
+       // STUDENT Modify here //
+      /// Neural Control I: CPG implementation, for students ///
 
-      //left middle
-      y_[TL1_m] = 0;
-      y_[CL1_m] = 0;
-      y_[FL1_m] = 0;
+ #ifdef CPG
 
-      //right front
-      y_[TR0_m] = 0;
-      y_[CR0_m] = 0;
-      y_[FR0_m] = 0;
+      WeightH1_H1  =  0.0;
+      WeightH2_H2  =  0.0;
+      WeightH1_H2  =  0.0;
+      WeightH2_H1  =  0.0;
 
-      //left front
-      y_[TL0_m] = 0;
-      y_[CL0_m] = 0;
-      y_[FL0_m] = 0;
+      activityH1 = 0;
+      activityH2 = 0;
 
-      // backbone joint
-      y_[BJ_m] = 0;
+      outputH1 = 0;
+      outputH2 = 0;
 
-      // update step counter
-      t++;
+
+      printf("CPG %f %f\n",outputH1, outputH2);
+#endif
+
+
+  /*******************************************************************************
+   *  MODULE Motor neurons
+   *******************************************************************************/
+  // STUDENT Modify here //
+
+  /// Neural Control I: CPG implementation, for students ///
+    //M0  
+    y_[TR0_m] = 0;
+    //M1
+    y_[TR1_m] = 0;
+    //M2
+    y_[TR2_m] = 0;
+
+    //M3
+    y_[TL0_m] = 0;
+    //M4
+    y_[TL1_m] = 0;
+    //M5
+    y_[TL2_m] = 0;
+
+    //M6
+    y_[CR0_m] = 0;
+    //M7
+    y_[CR1_m] = 0;
+    //M8
+    y_[CR2_m] = 0;
+
+    //M9
+    y_[CL0_m] = 0;
+    //M10
+    y_[CL1_m] = 0;
+    //M11
+    y_[CL2_m] = 0;
+
+    //M12
+    y_[FR0_m] = 0;
+    //M13
+    y_[FR1_m] = 0;
+    //M14   
+    y_[FR2_m] = 0;
+     
+    //M15
+    y_[FL0_m] = 0;
+    //M16
+    y_[FL1_m] = 0;
+    //M17
+    y_[FL2_m] = 0;
+      
+    // backbone joint
+    y_[BJ_m] = 0;
+
+
+    // update step counter
+    t++;
+
+     
+      saveFile1 <<outputH1<<"  "<<outputH2<<"  "<<y_[TR0_m]<<" "<<y_[TR1_m]<<" "<<y_[TR2_m]<<"   \n" << flush; //SAVE DATA
+      saveFile2 <<outputH1<<"  "<<outputH2<<"  "<<y_[TR0_m]<<" "<<y_[TR1_m]<<" "<<y_[TR2_m]<<"   \n" << flush; //SAVE DATA
+
     };
 
     /***** STOREABLE ****/
@@ -175,13 +279,68 @@ class EmptyController : public AbstractController {
     };
 
 
+
+
   protected:
     unsigned short number_channels;
 
     int t;
     paramkey name;
-    double outputH1;
-    double outputH2;
+
+   
+   //0) Create your parameters
+ 
+   /// Neural Control I: CPG implementation, for students ///
+
+   double alph;
+   double phi;
+   double WeightH1_H1;
+   double WeightH2_H2;
+   double WeightH1_H2;
+   double WeightH2_H1;
+
+   double BiasH1;
+   double BiasH2;
+
+   double activityH1;
+   double activityH2;
+
+   double outputH1;
+   double outputH2;
+   
+   double bias_tjoint;
+   double bias_cjoint;
+   double bias_fjoint;
+
+   double WeightM0_H2;
+   double WeightM1_H2;
+   double WeightM2_H2;
+
+   double WeightM3_H2;
+   double WeightM4_H2;
+   double WeightM5_H2;
+
+   double WeightM6_H1;
+   double WeightM7_H1;
+   double WeightM8_H1;
+
+   double WeightM9_H1;
+   double WeightM10_H1;
+   double WeightM11_H1;
+
+   double WeightM12_H1;
+   double WeightM13_H1;
+   double WeightM14_H1;
+
+   double WeightM15_H1;
+   double WeightM16_H1;
+   double WeightM17_H1;
+
+
+    // --- Save text------------//
+    ofstream saveFile1;
+    ofstream saveFile2;
+    //-------------------------//
 
 };
 

@@ -35,6 +35,8 @@
 
 // include the controller
 #include "emptycontroller.h"
+//#include "Task1_CPG_control_empty.h"
+//#include "Task2_CPG_VRN_control_empty.h"
 
 
 // joint needed for fixation of the robot in the beginning
@@ -51,10 +53,14 @@ using namespace std;
 // fetch all the stuff of lpzrobots into scope
 using namespace lpzrobots;
 
+bool obstacle_active = false;
+bool track = false; // you can set to false to not displaying the track
 
 std::vector<lpzrobots::AbstractObstacle*> obst;
 //std::vector<lpzrobots::FixedJoint*> fixator;
 // add head file for creating a sphere by Ren ------------
+
+
 
 class ThisSim : public lpzrobots::Simulation {
   public:
@@ -68,6 +74,9 @@ class ThisSim : public lpzrobots::Simulation {
     //setTitle("centered text");
     //setCaption("right aligned text");
   }
+
+  Playground* playground;
+
 
   /**
    * starting function (executed once at the beginning of the simulation loop)
@@ -96,11 +105,30 @@ class ThisSim : public lpzrobots::Simulation {
     //add obstacle
     PassiveBox* b1;
     double length = 3;
-    double width = 0.2;
-    double height = 1.0;
-    bool obstacle_active = false;
+    double width = 0.3;
+    double height = 0.325;
+
+
+      PassiveBox* b2;
+      double length2 = 3;
+      double width2 = 1;
+      double height2 = 0.9;
+
+      PassiveBox* b3;
+      double length3 = 3;
+      double width3 = 0.3;
+      double height3 = 0.28;
+
+      PassiveBox* b4;
+      double length4 = 3.5;
+      double width4 = 0.8;
+      double height4 = 0.6;
+
+
     if(obstacle_active)
     {
+
+
       b1 = new PassiveBox(odeHandle, osgHandle, osg::Vec3(length, width, height /*size*/));
       //b1->setTexture("dusty.rgb");
       b1->setColor(Color(1,0,0));
@@ -108,17 +136,59 @@ class ThisSim : public lpzrobots::Simulation {
       //osg::Matrix pose;
       //      pose.setTrans(osg::Vec3(/*-4.5+*/i*4.5,3+i,0));
       //b1->setPose(osg::Matrix::rotate(0.5*(M_PI/2), 0,0, 1) * osg::Matrix::translate(/*-4.5+*/i*4.5,3+i,0.5) /* pose*/);
-      b1->setPose(osg::Matrix::rotate(/*-0.5*(M_PI/4)*/ (M_PI/2), 0,0, 1) * osg::Matrix::translate(2.0, 0.0,0.0) /* pose*/);
+      b1->setPose(osg::Matrix::rotate(/*-0.5*(M_PI/4)*/ (M_PI/2), 0,0, 1) * osg::Matrix::translate(2.0, -0.6,0.0) /* pose*/);
       global.obstacles.push_back(b1);
       lpzrobots::FixedJoint* fixator = new  lpzrobots::FixedJoint(b1->getMainPrimitive(), global.environment);
       fixator->init(odeHandle, osgHandle);
+
+
+
+      b2 = new PassiveBox(odeHandle, osgHandle, osg::Vec3(length2, width2, height2 /*size*/));
+      //b1->setTexture("dusty.rgb");
+      b2->setColor(Color(1,1,0));
+      //b1->setPosition(osg::Vec3(/*-4.5+*/i*4.5,3+i,0)); // Fixed robot position
+      //osg::Matrix pose;
+      //      pose.setTrans(osg::Vec3(/*-4.5+*/i*4.5,3+i,0));
+      //b1->setPose(osg::Matrix::rotate(0.5*(M_PI/2), 0,0, 1) * osg::Matrix::translate(/*-4.5+*/i*0.1,0+i,0.0) /* pose*/);
+      b2->setPose(osg::Matrix::rotate((M_PI), 0,0, 1) * osg::Matrix::translate(-0.5, 1.8,0.0) /* pose*/);
+      global.obstacles.push_back(b2);
+      lpzrobots::FixedJoint* fixator4 = new  lpzrobots::FixedJoint(b2->getMainPrimitive(), global.environment);
+      fixator4->init(odeHandle, osgHandle);
+
+
+      b3 = new PassiveBox(odeHandle, osgHandle, osg::Vec3(length3, width3, height3 /*size*/));
+      //b1->setTexture("dusty.rgb");
+      b3->setColor(Color(1,0,1));
+      //b1->setPosition(osg::Vec3(/*-4.5+*/i*4.5,3+i,0)); // Fixed robot position
+      //osg::Matrix pose;
+      //      pose.setTrans(osg::Vec3(/*-4.5+*/i*4.5,3+i,0));
+      //b1->setPose(osg::Matrix::rotate(0.5*(M_PI/2), 0,0, 1) * osg::Matrix::translate(/*-4.5+*/i*4.5,3+i,0.5) /* pose*/);
+      b3->setPose(osg::Matrix::rotate(/*-0.5*(M_PI/4)*/ (M_PI/2), 0,0, 1) * osg::Matrix::translate(1.0, 0.0,0.0) /* pose*/);
+      global.obstacles.push_back(b3);
+      lpzrobots::FixedJoint* fixator5 = new  lpzrobots::FixedJoint(b3->getMainPrimitive(), global.environment);
+      fixator5->init(odeHandle, osgHandle);
+
+
+      b4 = new PassiveBox(odeHandle, osgHandle, osg::Vec3(length4, width4, height4 /*size*/));
+      //b1->setTexture("dusty.rgb");
+      b3->setColor(Color(1,1,1));
+      //b1->setPosition(osg::Vec3(/*-4.5+*/i*4.5,3+i,0)); // Fixed robot position
+      //osg::Matrix pose;
+      //      pose.setTrans(osg::Vec3(/*-4.5+*/i*4.5,3+i,0));
+      //b1->setPose(osg::Matrix::rotate(0.5*(M_PI/2), 0,0, 1) * osg::Matrix::translate(/*-4.5+*/i*4.5,3+i,0.5) /* pose*/);
+      b4->setPose(osg::Matrix::rotate(/*-0.5*(M_PI/4)*/ (M_PI/6), 0,0, 1) * osg::Matrix::translate(1.0, -3.0,0.0) /* pose*/);
+      global.obstacles.push_back(b4);
+      lpzrobots::FixedJoint* fixator6 = new  lpzrobots::FixedJoint(b4->getMainPrimitive(), global.environment);
+      fixator6->init(odeHandle, osgHandle);
+
     }
+
 
 
     //----------create a sphere as the target by Ren-----------------------------
     //the first sphere
     lpzrobots::PassiveSphere* s1 = new lpzrobots::PassiveSphere(odeHandle, osgHandle, 0.1);
-    s1->setPosition(osg::Vec3(3.0, 0.0, 0.1));
+    s1->setPosition(osg::Vec3(3.5, -1.5, 0.2));//0.1
     s1->setTexture("Images/dusty.rgb");
     s1->setColor(lpzrobots::Color(1,0,0));
     obst.push_back(s1);
@@ -128,7 +198,7 @@ class ThisSim : public lpzrobots::Simulation {
 
     //the second sphere
     lpzrobots::PassiveSphere* s2 = new lpzrobots::PassiveSphere(odeHandle, osgHandle, 0.1);
-    s2->setPosition(osg::Vec3(0.0, 3.0, 0.1));
+    s2->setPosition(osg::Vec3(0.0, 3.0, 0.2));//0.1
     s2->setTexture("Images/dusty.rgb");
     s2->setColor(lpzrobots::Color(0,1,0));
     obst.push_back(s2);
@@ -138,13 +208,16 @@ class ThisSim : public lpzrobots::Simulation {
 
     //the third sphere
     lpzrobots::PassiveSphere* s3 = new lpzrobots::PassiveSphere(odeHandle, osgHandle, 0.1);
-    s3->setPosition(osg::Vec3(0.0, -3.0, 0.1));
+    s3->setPosition(osg::Vec3(0.0, -3.0, 0.2));//0.1
     s3->setTexture("Images/dusty.rgb");
     s3->setColor(lpzrobots::Color(0,0,1));
     obst.push_back(s3);
     global.obstacles.push_back(s3);
     lpzrobots::FixedJoint* fixator3 = new  lpzrobots::FixedJoint(s3->getMainPrimitive(), global.environment);
     fixator3->init(odeHandle, osgHandle);
+
+
+
 
     //----------create a sphere as the target by Ren-----------------------------
 
@@ -189,6 +262,10 @@ class ThisSim : public lpzrobots::Simulation {
         global.environment);
     robotfixator->init(odeHandle, osgHandle, false);
 
+
+    // Possibility to add tracking for robot
+      if (track) agent->setTrackOptions(TrackRobot(true, false, false, true, "", 60)); // Display trace
+
     // inform global variable over everything that happened:
     global.configs.push_back(amos);
     global.agents.push_back(agent);
@@ -231,6 +308,7 @@ class ThisSim : public lpzrobots::Simulation {
   lpzrobots::Joint* robotfixator;
   AbstractController* controller;
   lpzrobots::AmosII* amos;
+
 };
 
 int main(int argc, char **argv)
