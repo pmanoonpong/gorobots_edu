@@ -34,10 +34,14 @@
 #include <ode_robots/amosII.h>
 
 // include the controller
-#include "emptycontroller.h"
+//#include "emptycontroller.h"
 //#include "Task1_CPG_control_empty.h"
 //#include "Task2_CPG_VRN_control_empty.h"
-
+//#include "Task3_CPG_VRN_MRC_control_empty.h"
+//#include "Task4_CPG_VRN_MRC_ICO_control_empty.h"
+//#include "Task5_CPG_VRN_MRC_ICO_Hormone_control_empty.h"
+//#include "Task5_CPG_VRN_MRC_ICO_Hormone_control_solution.h"
+#include "Task6_CPG_VRN_MRC_ICO_DecoupledCPGs_control_solution.h"
 
 // joint needed for fixation of the robot in the beginning
 #include <ode_robots/joint.h>
@@ -54,7 +58,7 @@ using namespace std;
 using namespace lpzrobots;
 
 bool obstacle_active = false;
-bool track = false; // you can set to false to not displaying the track
+bool track = true; // you can set to false to not displaying the track
 
 std::vector<lpzrobots::AbstractObstacle*> obst;
 //std::vector<lpzrobots::FixedJoint*> fixator;
@@ -92,7 +96,7 @@ class ThisSim : public lpzrobots::Simulation {
     // set simulation parameters
     global.odeConfig.setParam("controlinterval", 10);
     global.odeConfig.setParam("simstepsize", 0.01);
-    global.odeConfig.setParam("noise", 0.3);
+    global.odeConfig.setParam("noise", 0.05); //normal noise = 0.3 Reduce to 0.05 for Decoupled CPGs (PM)
 
     // add playground
     lpzrobots::Playground* playground
