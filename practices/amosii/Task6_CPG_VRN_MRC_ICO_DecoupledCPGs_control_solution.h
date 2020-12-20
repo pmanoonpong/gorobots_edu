@@ -26,8 +26,8 @@ using namespace std;
 #define CPG
 //Note That: For decoupled CPGs implementation, the noise parameter in main.cpp 
 //should be set to a small value, otherwise the GRF cannot be identified from noise
-#define PhaseModulation 
-//#define PhaseResetting
+//#define PhaseModulation 
+#define PhaseResetting
 
 /**
  * Empty robot controller.
@@ -273,7 +273,7 @@ class EmptyController : public AbstractController {
                 // arraies which stored the corresponding states of all CPGs.
                 // @Note that: GRF_threshold directly determines the phase resetting timing. It influences the
                 // the functionality of the mechanism. STudents can try to change its value to see what will happen
-                // The GRF_threshold should be smaller than the maximum GRF value
+                // The GRF_threshold should be smammler than the maximum GRF value
                  
                 leg_num=6; // the number of the legs, for hexapod leg_num=6
                 CPGs_outputH1.resize(leg_num); //The H1 neuron activity for leg_num CPGs
@@ -285,7 +285,7 @@ class EmptyController : public AbstractController {
                 resetting1.resize(leg_num);
                 resetting2.resize(leg_num);
                 Diracs=0;
-                GRF_threshold=0.25; //0.25 GRF_threshold determine
+                GRF_threshold=0.25; // GRF_threshold determine
 #endif
 
                 saveFile1.open("savedata.txt",ios::out);
@@ -318,6 +318,8 @@ class EmptyController : public AbstractController {
                 addInspectableValue("exp_output", &exp_output,"exp_output");
 
 #if defined(PhaseModulation)
+                addInspectableValue("R0_CPGH1", &CPGs_outputH1.at(0),"R0_CPGs_H1");
+                addInspectableValue("R0_CPGH2", &CPGs_outputH2.at(0),"R0_CPGs_H2");
                 addInspectableValue("fc", &fc.at(0),"fc"); // 0 means the right front leg
                 addInspectableValue("fs", &fs.at(0),"fs");
                 addInspectableValue("R0_GRF", &GRF.at(0),"R0_GRF");
@@ -325,6 +327,8 @@ class EmptyController : public AbstractController {
 #endif
 
 #if defined(PhaseResetting)
+                addInspectableValue("R0_CPGH1", &CPGs_outputH1.at(0),"R0_CPGs_H1");
+                addInspectableValue("R0_CPGH2", &CPGs_outputH2.at(0),"R0_CPGs_H2");
                 addInspectableValue("R0_GRF", &GRF.at(0),"R0_GRF");
                 addInspectableValue("R1_GRF", &GRF.at(1),"R1_GRF");
                 addInspectableValue("R0_GRF_old", &GRF_old.at(0),"R0_GRF_old");
@@ -661,7 +665,7 @@ class EmptyController : public AbstractController {
             BiasH2 = 0.01;
 
             for(unsigned int idx=0;idx<leg_num;idx++){
-                GRF.at(idx)=0.05*x_[R0_fs+idx]+0.95*GRF_old.at(idx);// low-pass filter, STudents can changes the parameters 0.05 and 0.95 to adjust the filter
+                GRF.at(idx)=0.2*x_[R0_fs+idx]+0.8*GRF_old.at(idx);// low-pass filter, STudents can changes the parameters 0.05 and 0.95 to adjust the filter
                 if((GRF.at(idx) > GRF_threshold)&&(GRF_old.at(idx) <= GRF_threshold)){
                     Diracs =1;
                     printf("Resetting, GRF:%f, GRF_old:%f\n",GRF.at(idx),GRF_old.at(idx));
@@ -675,8 +679,8 @@ class EmptyController : public AbstractController {
                 CPGs_activityH1.at(idx) = WeightH1_H1 * CPGs_outputH1.at(idx) + WeightH1_H2 * CPGs_outputH2.at(idx) + BiasH1;  
                 CPGs_activityH2.at(idx) = WeightH2_H2 * CPGs_outputH2.at(idx) + WeightH2_H1 * CPGs_outputH1.at(idx) + BiasH2; 
 
-                resetting1.at(idx) = ( 1.0 - CPGs_activityH1.at(idx))*Diracs;
-                resetting2.at(idx) = - CPGs_activityH2.at(idx)*Diracs;
+                resetting1.at(idx) = - CPGs_activityH1.at(idx)*Diracs;
+                resetting2.at(idx) = (1.0- CPGs_activityH2.at(idx))*Diracs;
 
                 CPGs_activityH1.at(idx)=CPGs_activityH1.at(idx)+resetting1.at(idx);
                 CPGs_activityH2.at(idx)=CPGs_activityH2.at(idx)+resetting2.at(idx);
