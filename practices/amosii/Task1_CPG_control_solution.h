@@ -10,12 +10,21 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <math.h>
+#include <vector>
+#include <algorithm>
+
+
+#include <unistd.h> // standard function definitions time delay function
+
 ///////// Save text////////////////////////
 #include <iostream>
 #include <fstream>
 #include <string.h>
 using namespace std;
 ///////////////////////////////////////////
+
+
 
 
 #include <selforg/matrix.h>
@@ -85,11 +94,10 @@ class EmptyController : public AbstractController {
       //1) Initial parameters 
       
       /// Neural Control I: CPG implementation, for students ///
-      outputH1 = 0.001;
-      outputH2 = 0.001;
+      outputH1 = 0.2;
+      outputH2 = 0.2;
       activityH1 = 0.0;
       activityH2 = 0.0;
-
 
       //  Connections from CPG to motor neurons
       bias_tjoint = 0.0;
@@ -119,6 +127,18 @@ class EmptyController : public AbstractController {
       WeightM15_H1 = 0.2;
       WeightM16_H1 = -0.2;
       WeightM17_H1 = 0.2;
+
+      percount = 1;
+      UPDATE = 1;
+
+      outputH1_Chaos = 0.001;
+      outputH2_Chaos = 0.001;
+      activityH1_Chaos = 0.0;
+      activityH2_Chaos = 0.0;
+
+      alph = 1.5;
+      phi = 0.3*pi;// 0< x < pi
+      MI = 0.01;
 
       saveFile1.open("savedata1.txt",ios::out);
       saveFile2.open("savedata2.txt",ios::out);
@@ -189,19 +209,60 @@ class EmptyController : public AbstractController {
 
  #ifdef CPG
 
-      WeightH1_H1  =  1.5;
-      WeightH2_H2  =  1.5;
-      WeightH1_H2  =  -0.4;
-      WeightH2_H1  =  0.4;
+
+if(++percount%UPDATE==0)
+	{
+
+      // Chaotic CPG
+      WeightH1_H1_Chaos  = -5.5;// 1.5; 
+      WeightH2_H2_Chaos  =  0.0;//1.5;
+      WeightH1_H2_Chaos  =  1.48;//-0.4;
+      WeightH2_H1_Chaos  =  -1.65;//0.4;
+
+      BiasH1_Chaos = -5.73;
+      BiasH2_Chaos = 0.25;
+
+      activityH1_Chaos = WeightH1_H1_Chaos*outputH1_Chaos+WeightH1_H2_Chaos*outputH2_Chaos+BiasH1_Chaos;
+      activityH2_Chaos = WeightH2_H2_Chaos*outputH2_Chaos+WeightH2_H1_Chaos*outputH1_Chaos+BiasH2_Chaos;
+    
+      outputH1_Chaos = (exp(2*activityH1_Chaos)-1)/(exp(2*activityH1_Chaos)+1);//tanh(activityH1);
+      outputH2_Chaos = (exp(2*activityH2_Chaos)-1)/(exp(2*activityH2_Chaos)+1);//tanh(activityH2);
+
+
+      // Periodic CPG
+      WeightH1_H1  = alph*cos(phi);//1.5;1.4; 
+      WeightH2_H2  = alph*cos(phi);//1.5;1.4;
+      WeightH1_H2  = -alph*sin(phi);//-0.4;-0.19
+      WeightH2_H1  = alph*sin(phi);//0.4;0.19
+
+      //WeightH1_H1  = 1.4; 
+      //WeightH2_H2  = 1.4;
+      //WeightH1_H2  = -0.18-MI;
+      //WeightH2_H1  = 0.18+MI;
+
+      //WeightH1_H1  = 1.5; 
+      //WeightH2_H2  = 1.5;
+      //WeightH1_H2  = -0.4;
+      //WeightH2_H1  = 0.4;
+
 
       activityH1 = WeightH1_H1*outputH1+WeightH1_H2*outputH2;
       activityH2 = WeightH2_H2*outputH2+WeightH2_H1*outputH1;
+
 
       outputH1 = (exp(2*activityH1)-1)/(exp(2*activityH1)+1);//tanh(activityH1);
       outputH2 = (exp(2*activityH2)-1)/(exp(2*activityH2)+1);//tanh(activityH2);
 
 
-      printf("CPG %f %f\n",outputH1, outputH2);
+
+      //usleep(1000000);
+      
+
+	}
+
+	printf("CPG %f %f\n",WeightH1_H1, WeightH1_H2);
+
+      //printf("CPG %f %f\n",outputH1, outputH2);
 #endif
 
 
@@ -211,6 +272,7 @@ class EmptyController : public AbstractController {
 
   /// Neural Control I: CPG implementation, for students ///
     //M0  
+    //y_[TR0_m] = WeightM0_H2*outputH2_Chaos + bias_tjoint;
     y_[TR0_m] = WeightM0_H2*outputH2 + bias_tjoint;
     //M1
     y_[TR1_m] = WeightM1_H2*outputH2 + bias_tjoint;
@@ -291,6 +353,7 @@ class EmptyController : public AbstractController {
 
    double alph;
    double phi;
+   double MI;
    double WeightH1_H1;
    double WeightH2_H2;
    double WeightH1_H2;
@@ -332,6 +395,25 @@ class EmptyController : public AbstractController {
    double WeightM15_H1;
    double WeightM16_H1;
    double WeightM17_H1;
+
+
+   int percount;
+   int UPDATE;
+
+   double WeightH1_H1_Chaos;
+   double WeightH2_H2_Chaos;
+   double WeightH1_H2_Chaos;
+   double WeightH2_H1_Chaos;
+
+   double BiasH1_Chaos;
+   double BiasH2_Chaos;
+
+   double activityH1_Chaos;
+   double activityH2_Chaos;
+
+   double outputH1_Chaos;
+   double outputH2_Chaos;
+
 
 
     // --- Save text------------//
